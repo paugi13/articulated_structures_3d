@@ -101,10 +101,13 @@ Fdata = [1 2 -W_M/2;
 
 fixNod = [1 1 0;
     1 2 0;
+    1 3 0;
     2 4 0;
     2 5 0;
-    4 11 0;
-    4 12 0;
+    2 6 0;
+    3 7 0;
+    3 8 0;
+    3 9 0;
 ];
 
 %% SOLVER
@@ -121,7 +124,7 @@ n_el_dof = n_i*n_nod;         % Number of DOFs for each element
 Td = connectDOFs(n_el,n_nod,n_i,Tnod);
 K_e = computeKelBar(n_d,n_el,x,Tnod,mat,Tmat);
 KG = assemblyKG(n_el,n_el_dof,n_dof,Td,K_e);
-F_bar = density_calc(x,mat, Tmat, n_el, Td, Tnod, n);
+F_bar = density_calc(x,mat, Tmat, n_el, Td, Tnod);
 Fext = computeF(n_i,n_dof, Fdata, F_bar);
 [vL,vR,uR] = applyCond(n_i,n_dof,fixNod);
 [u,R] = solveSys(vL,vR,uR,KG,Fext);
