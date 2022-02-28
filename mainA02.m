@@ -72,23 +72,7 @@ mat = [% Young M.        Section A.    Density
 
 % Material connectivities
 %  Tmat(e) = Row in mat corresponding to the material associated to element e 
-Tmat = [1
-    1
-    1
-    1
-    1
-    1
-    1
-    1
-    1
-    1
-    1
-    2
-    2
-    2
-    2
-    2
-    2
+Tmat = [1;1;1;1;1;1;1;1;1;1;1;2;2;2;2;2;2
 ];
 
 %Compute forces 
@@ -137,8 +121,8 @@ n_el_dof = n_i*n_nod;         % Number of DOFs for each element
 Td = connectDOFs(n_el,n_nod,n_i,Tnod);
 K_e = computeKelBar(n_d,n_el,x,Tnod,mat,Tmat);
 KG = assemblyKG(n_el,n_el_dof,n_dof,Td,K_e);
-Fext = computeF(n_i,n_dof,Fdata);
-
+F_bar = density_calc(x,mat, Tmat, n_el, Td, Tnod, n);
+Fext = computeF(n_i,n_dof, Fdata, F_bar);
 [vL,vR,uR] = applyCond(n_i,n_dof,fixNod);
 [u,R] = solveSys(vL,vR,uR,KG,Fext);
 [eps,sig, E_e, l_e] = computeStrainStressBar(n_d,n_el,u,Td,x,Tnod,mat,Tmat);
