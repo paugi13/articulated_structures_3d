@@ -4,7 +4,7 @@ function [F_bar_data] = density_calc(x,mat, Tmat, n_el, Td, Tn, n)
 
 W_bar = zeros(n_el, 1);
 j=1;
-F_bar_data = zeros(2*n, 3);
+F_bar_data = zeros(2*n_el, 3);
 for i=1:n_el
     x_1_e= x(Tn(i,1),1);
     x_2_e= x(Tn(i,2),1);
