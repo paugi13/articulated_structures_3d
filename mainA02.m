@@ -11,53 +11,29 @@ close all;
 %% INPUT DATA
 
 % Geometric data
-H = 0.9;
-W = 0.85;
-B = 3.2;
-% d = ;
-D1 = 0.018; 
-d1 = 0.0075;
-D2 = 0.003;
+L = 1;
 
 % Mass
-M = 150;
-
-% Other
-g = 9.81;
+F = 100;
 
 %% PREPROCESS
 
 % Nodal coordinates matrix 
 %  x(a,j) = coordinate of node a in the dimension j
 x = [%     X      Y      Z
-         2*W,  -W/2,     0; % (1)
-         2*W,   W/2,     0; % (2)
-         2*W,     0,     H; % (3)
-           0,     0,     H; % (4)
-           0,    -B,     H; % (5)
-           0,     B,     H; % (6)
-           W,     0,     H; % (7)
+         0 0 0
+         0 L 0
+         0 0 L
+         0 L L 
+         L L/2 L/2
 ];
 
 % Nodal connectivities  
 %  Tnod(e,a) = global nodal number associated to node a of element e
-Tnod = [1 2
-        1 3
-        2 3
+Tnod = [1 5
+        2 5
         3 5
-        3 6
-        3 7
-        4 5
-        4 6
-        4 7
-        5 7
-        6 7
-        1 4
-        1 5
-        1 7
-        2 4
-        2 6
-        2 7   
+        4 5   
 ];     
 
 % Material properties matrix
@@ -66,43 +42,29 @@ Tnod = [1 2
 %  mat(m,3) = Density of material m
 %  --more columns can be added for additional material properties--
 mat = [% Young M.        Section A.    Density   
-               75000e6 ,         pi*((D1/2)^2-(d1/2)^2)       ,    3350       ;  % Material (1)
-                147000e6,             pi*(D2/2)^2   ,      950     ;  % Material (2)
+               75000e6 ,         0.0002       ,    3350       ;  % Material (1)
 ];
 
 % Material connectivities
 %  Tmat(e) = Row in mat corresponding to the material associated to element e 
-Tmat = [1;1;1;1;1;1;1;1;1;1;1;2;2;2;2;2;2
+Tmat = [1;1;1;1;1
 ];
 
-%Compute forces 
-W_M = 9.81*M;
-L = W_M;
-D = 7*L*W/(5*H);
-T = D;
-
-Fdata = [1 2 -W_M/2;
-    2 5 -W_M/2;
-    3 8 L/5;
-    4 11 L/5;
-    5 14 L/5;
-    6 17 L/5;
-    7 20 L/5;
-    3 7 -D/5;
-    4 10 -D/5;
-    5 13 -D/5;
-    6 16 -D/5;
-    7 19 -D/5;
-    1 1 T/2;
-    2 4 T/2;
+Fdata = [5 15 -F
 ];
 
 %
 
 fixNod = [1 1 0;
     1 2 0;
+    1 3 0;
     2 4 0;
     2 5 0;
+    2 6 0;
+    3 7 0;
+    3 8 0;
+    3 9 0;
+    4 10 0;
     4 11 0;
     4 12 0;
 ];
