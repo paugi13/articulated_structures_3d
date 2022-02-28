@@ -16,9 +16,9 @@ for i=1:n_el
 %     s_e=(y_2_e-y_1_e)/l_e;
 %     c_e=(x_2_e-x_1_e)/l_e;
     W_bar(i,1) = mat(Tmat(i),2)*l_e*9.81/2;
-    F_bar_data(j,:) = [Td(i,1) Td(i,3) -W_bar(i,1)];  
+    F_bar_data(j,:) = [Td(i,3)/3 Td(i,3) -W_bar(i,1)];  
     j = j+1;
-    F_bar_data(j,:) = [Td(i,4) Td(i,6) -W_bar(i,1)];
+    F_bar_data(j,:) = [Td(i,6)/3 Td(i,6) -W_bar(i,1)];
     j = j+1;
 end
 
