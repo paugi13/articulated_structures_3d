@@ -14,7 +14,7 @@ close all;
 L = 1;
 
 % Mass
-F = 100;
+F = 1000;
 
 %% PREPROCESS
 
