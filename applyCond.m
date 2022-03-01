@@ -16,6 +16,20 @@ function [vL,vR,uR] = applyCond(n_i,n_dof,fixNod)
 % Hint: Use the relation between the DOFs numbering and nodal numbering to
 % determine at which DOF in the global system each displacement is prescribed.
 
+for i = 1:size(fixNod,1) 
+    if fixNod(i,2) == 1
+        fixNod(i,2) = fixNod(i,1)*3-2;
+    end
+    
+    if fixNod(i,2) == 2
+        fixNod(i,2) = fixNod(i,1)*3-1;
+    end
+    
+    if fixNod(i,2) == 3
+        fixNod(i,2) = fixNod(i,1)*3;
+    end
+end
+
 vR = zeros(size(fixNod,1), 1);
 vL = zeros(n_dof-size(fixNod,1), 1);
 for i = 1:size(fixNod,1)
