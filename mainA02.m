@@ -65,9 +65,12 @@ Tnod = [1 2
 %  mat(m,2) = Section area of material m
 %  mat(m,3) = Density of material m
 %  --more columns can be added for additional material properties--
+
+I1 = pi/4*((D1/2)^4-(d1/2)^4);
+I2 = pi/4*(D2/2)^4;
 mat = [% Young M.        Section A.    Density   
-               75000e6 ,         pi*((D1/2)^2-(d1/2)^2)       ,    3350       ;  % Material (1)
-                147000e6,             pi*(D2/2)^2   ,      950     ;  % Material (2)
+               75000e6 ,  pi*((D1/2)^2-(d1/2)^2) , 3350 , I1       ;  % Material (1)
+                147000e6,   pi*(D2/2)^2   ,  950  , I2     ;  % Material (2)
 ];
 
 % Material connectivities
@@ -103,9 +106,17 @@ fixNod = [1 1 0;
     2 5 0;
     3 9 0;
     4 12 0;
-    5 9 0;
+    5 14 0;
     6 16 0;
 ];
+
+% [1 1 0;
+%     2 5 0;
+%     3 9 0;
+%     4 12 0;
+%     5 14 0;
+%     6 16 0;
+% ];
 
 %% SOLVER
 
@@ -128,6 +139,10 @@ Fext = computeF(n_i,n_dof, Fdata, F_bar);
 [eps,sig, E_e, l_e] = computeStrainStressBar(n_d,n_el,u,Td,x,Tnod,mat,Tmat);
 
 %% POSTPROCESS
+
+% Critical stress for buckling.
+cr_stress = pi^2*E_e.*mat(Tmat(:),4)./((l_e.^2).*mat(Tmat(:),2));
+
 
 % Plot deformed structure with stress of each bar
 scale = 100; % Adjust this parameter for properly visualizing the deformation
