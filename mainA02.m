@@ -58,15 +58,15 @@ Fdata = [5 15 -F
 fixNod = [1 1 0;
     1 2 0;
     1 3 0;
-    2 4 0;
-    2 5 0;
-    2 6 0;
-    3 7 0;
-    3 8 0;
-    3 9 0;
-    4 10 0;
-    4 11 0;
-    4 12 0;
+    2 1 0;
+    2 2 0;
+    2 3 0;
+    3 1 0;
+    3 2 0;
+    3 3 0;
+    4 1 0;
+    4 2 0;
+    4 3 0;
 ];
 
 %% SOLVER
@@ -95,5 +95,7 @@ Fext = computeF(n_i,n_dof, Fdata, F_bar);
 scale = 100; % Adjust this parameter for properly visualizing the deformation
 plotBarStress3D(x,Tnod,u,sig,scale);
 
-
-
+xlswrite('table.xls', R,'Hoja1', 'B2');
+xlswrite('table.xls', fixNod(:,1),'Hoja1', 'C2');
+xlswrite('table.xls', fixNod(:,2),'Hoja1', 'D2');
+xlswrite('table.xls', sig,'Hoja1', 'F2');
