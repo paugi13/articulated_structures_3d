@@ -110,13 +110,6 @@ fixNod = [1 2 0;
     7 3 0;
 ];
 
-% 3 9 0;
-%     4 10 0;
-%     4 11 0;
-%     4 12 0;
-%     5 14 0;
-%     6 17 0;
-
 %% SOLVER
 
 n_d = size(x,2);              % Number of dimensions
