@@ -77,41 +77,15 @@ mat = [% Young M.        Section A.    Density
 %  Tmat(e) = Row in mat corresponding to the material associated to element e 
 Tmat = [1;1;1;1;1;1;1;1;1;1;1;2;2;2;2;2;2
 ];
+%
 
-%Compute forces 
-W_M = 9.81*M;
-L = W_M;
-D = 7*L*W/(5*H);
-T = D;
-
-Fdata = [1 3 -W_M/2;
-    2 6 -W_M/2;
-    3 9 L/5;
-    4 12 L/5;
-    5 15 L/5;
-    6 18 L/5;
-    7 21 L/5;
-    3 7 -D/5;
-    4 10 -D/5;
-    5 13 -D/5;
-    6 16 -D/5;
-    7 19 -D/5;
-    1 1 T/2;
-    2 4 T/2;
+fixNod = [1 1 0;
+    2 5 0;
+    3 9 0;
+    4 12 0;
+    5 14 0;
+    6 16 0;
 ];
-
-%Fixed nodes for the structure to 'feel' the stresses. 
-
-fixNod = [1 3 0;
-    4 2 0;
-    4 3 0;
-    3 1 0;
-    3 2 0;
-    3 3 0;
-];
-
-%% SOLVER
-
 n_d = size(x,2);              % Number of dimensions
 n_i = n_d;                    % Number of DOFs for each node
 n = size(x,1);                % Total number of nodes
@@ -120,11 +94,39 @@ n_el = size(Tnod,1);            % Total number of elements
 n_nod = size(Tnod,2);           % Number of nodes for each element
 n_el_dof = n_i*n_nod;         % Number of DOFs for each element 
 
-
+%Compute forces 
+W_M = 9.81*M;
 Td = connectDOFs(n_el,n_nod,n_i,Tnod);
+F_bar = density_calc(x,mat, Tmat, n_el, Td, Tnod);
+[T,L,D,W_T,x_cg,z_cg] = equilibrio_momentos(F_bar,W_M,H,W);
+
+% SUDDEN BURST
+SB=1; %Number 1 activates the calculation for a sudden gust of wind
+[T,D,L,Fax,Faz] = suddenBurst(SB,x_cg,z_cg,D,L,W_T,W,H,T);
+
+Fdata = [1 3 (-W_M/2)+Faz;
+    2 6 (-W_M/2)+Faz;
+    3 9 (L/5)+Faz;
+    4 12 (L/5)+Faz;
+    5 15 (L/5)+Faz;
+    6 18 (L/5)+Faz;
+    7 21 (L/5)+Faz;
+    3 7 (-D/5)+Fax;
+    4 10 (-D/5)+Fax;
+    5 13 (-D/5)+Fax;
+    6 16 (-D/5)+Fax;
+    7 19 (-D/5)+Fax;
+    1 1 (T/2)+Fax;
+    2 4 (T/2)+Fax;
+];
+
+
+
+%% SOLVER
 K_e = computeKelBar(n_d,n_el,x,Tnod,mat,Tmat);
 KG = assemblyKG(n_el,n_el_dof,n_dof,Td,K_e);
-F_bar = density_calc(x,mat, Tmat, n_el, Td, Tnod);
+
+%Bars' weights are being added twice!? --> Look at compute F. 
 Fext = computeF(n_i,n_dof, Fdata, F_bar);
 [vL,vR,uR] = applyCond(n_i,n_dof,fixNod);
 [u,R] = solveSys(vL,vR,uR,KG,Fext);
@@ -135,10 +137,8 @@ Fext = computeF(n_i,n_dof, Fdata, F_bar);
 % Critical stress for buckling.
 cr_stress = pi^2*E_e.*mat(Tmat(:),4)./((l_e.^2).*mat(Tmat(:),2));
 
-
 % Plot deformed structure with stress of each bar
 scale = 100; % Adjust this parameter for properly visualizing the deformation
 plotBarStress3D(x,Tnod,u,sig,scale);
-
 
 
