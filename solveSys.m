@@ -56,6 +56,8 @@ for i = 1:size(KLR, 1)
    end
 end
 
+%Depending on the fixed nodes, KLL's final expression may be a singular
+%matrix with too many 0 --> Everything lays on the distribution of vR.
 uL = KLL\(F_ext_L - KLR*uR);
 R = KRR*uR + KRL*uL - F_ext_R;
 
