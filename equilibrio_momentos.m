@@ -9,16 +9,16 @@ W_A = 0;
 for i = 1:size(F_bar,1)
    
    if F_bar(i,1)==4||F_bar(i,1)==5||F_bar(i,1)==6
-        W_D = W_D+F_bar(i,3);
+        W_D = W_D-F_bar(i,3);
    end
    if F_bar(i,1)==7
-        W_C = W_C+F_bar(i,3);
+        W_C = W_C-F_bar(i,3);
    end 
    if F_bar(i,1)==3
-        W_B = W_B+F_bar(i,3);
+        W_B = W_B-F_bar(i,3);
    end
    if F_bar(i,1)==1||F_bar(i,1)==2
-        W_A = W_A+F_bar(i,3);
+        W_A = W_A-F_bar(i,3);
    end
 end
 
