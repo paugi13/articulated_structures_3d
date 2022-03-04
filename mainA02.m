@@ -102,12 +102,12 @@ Fdata = [1 3 -W_M/2;
 
 %Fixed nodes for the structure to 'feel' the stresses. 
 
-fixNod = [1 2 0;
-    4 1 0;
+fixNod = [1 3 0;
     4 2 0;
     4 3 0;
-    2 3 0;
-    7 3 0;
+    3 1 0;
+    3 2 0;
+    3 3 0;
 ];
 
 %% SOLVER
