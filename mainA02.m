@@ -78,28 +78,6 @@ mat = [% Young M.        Section A.    Density
 Tmat = [1;1;1;1;1;1;1;1;1;1;1;2;2;2;2;2;2
 ];
 
-%Compute forces 
-W_M = 9.81*M;
-L = W_M;
-D = 7*L*W/(5*H);
-T = D;
-
-Fdata = [1 3 -W_M/2;
-    2 6 -W_M/2;
-    3 9 L/5;
-    4 12 L/5;
-    5 15 L/5;
-    6 18 L/5;
-    7 21 L/5;
-    3 7 -D/5;
-    4 10 -D/5;
-    5 13 -D/5;
-    6 16 -D/5;
-    7 19 -D/5;
-    1 1 T/2;
-    2 4 T/2;
-];
-
 %Fixed nodes for the structure to 'feel' the stresses. 
 
 fixNod = [1 3 0;
@@ -125,6 +103,35 @@ Td = connectDOFs(n_el,n_nod,n_i,Tnod);
 K_e = computeKelBar(n_d,n_el,x,Tnod,mat,Tmat);
 KG = assemblyKG(n_el,n_el_dof,n_dof,Td,K_e);
 F_bar = density_calc(x,mat, Tmat, n_el, Td, Tnod);
+
+suma_den = 0;
+for i=1:size(F_bar,1)
+   suma_den = suma_den + F_bar(i,3);
+end
+
+%Compute forces (without considering bars' densities)
+W_M = 9.81*M;
+L = W_M-suma_den;
+D = 7*L*W/(5*H);
+T = D;
+
+Fdata = [1 3 -W_M/2;
+    2 6 -W_M/2;
+    3 9 L/5;
+    4 12 L/5;
+    5 15 L/5;
+    6 18 L/5;
+    7 21 L/5;
+    3 7 -D/5;
+    4 10 -D/5;
+    5 13 -D/5;
+    6 16 -D/5;
+    7 19 -D/5;
+    1 1 T/2;
+    2 4 T/2;
+];
+
+
 Fext = computeF(n_i,n_dof, Fdata, F_bar);
 [vL,vR,uR] = applyCond(n_i,n_dof,fixNod);
 [u,R] = solveSys(vL,vR,uR,KG,Fext);
