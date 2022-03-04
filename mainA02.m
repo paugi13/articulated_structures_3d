@@ -80,11 +80,11 @@ Tmat = [1;1;1;1;1;1;1;1;1;1;1;2;2;2;2;2;2
 %
 
 fixNod = [1 1 0;
-    2 5 0;
-    3 9 0;
-    4 12 0;
-    5 14 0;
-    6 16 0;
+    2 2 0;
+    3 3 0;
+    4 3 0;
+    5 2 0;
+    6 1 0;
 ];
 n_d = size(x,2);              % Number of dimensions
 n_i = n_d;                    % Number of DOFs for each node
@@ -104,6 +104,8 @@ F_bar = density_calc(x,mat, Tmat, n_el, Td, Tnod);
 SB=1; %Number 1 activates the calculation for a sudden gust of wind
 [T,D,L,Fax,Faz] = suddenBurst(SB,x_cg,z_cg,D,L,W_T,W,H,T);
 
+Fax = Fax/7;
+Faz = Faz/7;
 Fdata = [1 3 (-W_M/2)+Faz;
     2 6 (-W_M/2)+Faz;
     3 9 (L/5)+Faz;
@@ -125,8 +127,6 @@ Fdata = [1 3 (-W_M/2)+Faz;
 %% SOLVER
 K_e = computeKelBar(n_d,n_el,x,Tnod,mat,Tmat);
 KG = assemblyKG(n_el,n_el_dof,n_dof,Td,K_e);
-
-%Bars' weights are being added twice!? --> Look at compute F. 
 Fext = computeF(n_i,n_dof, Fdata, F_bar);
 [vL,vR,uR] = applyCond(n_i,n_dof,fixNod);
 [u,R] = solveSys(vL,vR,uR,KG,Fext);
