@@ -88,6 +88,7 @@ fixNod = [1 3 0;
     3 3 0;
 ];
 
+
 %% SOLVER
 
 n_d = size(x,2);              % Number of dimensions
@@ -109,7 +110,6 @@ for i=1:size(F_bar,1)
    suma_den = suma_den + F_bar(i,3);
 end
 
-%Compute forces (without considering bars' densities)
 W_M = 9.81*M;
 L = W_M-suma_den;
 D = 7*L*W/(5*H);
