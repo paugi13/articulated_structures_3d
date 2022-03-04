@@ -79,13 +79,20 @@ Tmat = [1;1;1;1;1;1;1;1;1;1;1;2;2;2;2;2;2
 ];
 %
 
-fixNod = [1 1 0;
-    2 2 0;
-    3 3 0;
+fixNod = [1 3 0;
+    4 2 0;
     4 3 0;
-    5 2 0;
-    6 1 0;
+    3 1 0;
+    3 2 0;
+    3 3 0;
 ];
+
+% 1 1 0;
+%     2 2 0;
+%     3 3 0;
+%     4 3 0;
+%     5 2 0;
+%     6 1 0
 n_d = size(x,2);              % Number of dimensions
 n_i = n_d;                    % Number of DOFs for each node
 n = size(x,1);                % Total number of nodes
