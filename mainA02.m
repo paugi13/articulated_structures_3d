@@ -104,16 +104,16 @@ Td = connectDOFs(n_el,n_nod,n_i,Tnod);
 K_e = computeKelBar(n_d,n_el,x,Tnod,mat,Tmat);
 KG = assemblyKG(n_el,n_el_dof,n_dof,Td,K_e);
 F_bar = density_calc(x,mat, Tmat, n_el, Td, Tnod);
-
-suma_den = 0;
-for i=1:size(F_bar,1)
-   suma_den = suma_den + F_bar(i,3);
-end
-
-W_M = 9.81*M;
-L = W_M-suma_den;
-D = 7*L*W/(5*H);
-T = D;
+[Thrust,Lift,Drag,Weight,x_cg,z_cg] = equilibrio_momentos(F_bar,W_M,H,W);
+% suma_den = 0;
+% for i=1:size(F_bar,1)
+%    suma_den = suma_den + F_bar(i,3);
+% end
+% 
+% W_M = 9.81*M;
+% L = W_M-suma_den;
+% D = 7*L*W/(5*H);
+% T = D;
 
 Fdata = [1 3 -W_M/2;
     2 6 -W_M/2;
