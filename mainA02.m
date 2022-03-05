@@ -77,22 +77,24 @@ mat = [% Young M.        Section A.    Density
 %  Tmat(e) = Row in mat corresponding to the material associated to element e 
 Tmat = [1;1;1;1;1;1;1;1;1;1;1;2;2;2;2;2;2
 ];
-%
 
-fixNod = [1 3 0;
-    4 2 0;
-    4 3 0;
-    3 1 0;
-    3 2 0;
+%% Definition of fixed nodes
+fixNod = [1 1 0;
+    2 2 0;
     3 3 0;
+    4 3 0;
+    5 2 0;
+    6 1 0
 ];
 
-% 1 1 0;
-%     2 2 0;
-%     3 3 0;
+% 1 3 0;
+%     4 2 0;
 %     4 3 0;
-%     5 2 0;
-%     6 1 0
+%     3 1 0;
+%     3 2 0;
+%     3 3 0;
+
+%% Main structure parameters
 n_d = size(x,2);              % Number of dimensions
 n_i = n_d;                    % Number of DOFs for each node
 n = size(x,1);                % Total number of nodes
@@ -101,7 +103,7 @@ n_el = size(Tnod,1);            % Total number of elements
 n_nod = size(Tnod,2);           % Number of nodes for each element
 n_el_dof = n_i*n_nod;         % Number of DOFs for each element 
 
-%Compute forces 
+%Compute forces including densities in momentum equations
 W_M = 9.81*M;
 Td = connectDOFs(n_el,n_nod,n_i,Tnod);
 F_bar = density_calc(x,mat, Tmat, n_el, Td, Tnod);
