@@ -80,7 +80,7 @@ Tmat = [1;1;1;1;1;1;1;1;1;1;1;2;2;2;2;2;2
 
 %Fixed nodes for the structure to 'feel' the stresses. 
 
-fixNod = [1 3 0;
+fixNod = [ 1 3 0;
     4 2 0;
     4 3 0;
     3 1 0;
@@ -139,13 +139,17 @@ Fext = computeF(n_i,n_dof, Fdata, F_bar);
 
 %% POSTPROCESS
 
-% Critical stress for buckling.
-cr_stress = pi^2*E_e.*mat(Tmat(:),4)./((l_e.^2).*mat(Tmat(:),2));
-
-
 % Plot deformed structure with stress of each bar
 scale = 100; % Adjust this parameter for properly visualizing the deformation
 plotBarStress3D(x,Tnod,u,sig,scale);
 
+
+% Critical stress for buckling.
+cr_stress = pi^2*E_e.*mat(Tmat(:),4)./((l_e.^2).*mat(Tmat(:),2));
+cr_stress = cr_stress/(10^6);
+sig = sig/(10^6);
+
+xlswrite('table.xls', sig,'Hoja1', 'B2');
+xlswrite('table.xls', cr_stress,'Hoja1', 'C2');
 
 
