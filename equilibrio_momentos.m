@@ -24,9 +24,9 @@ end
 
 % Calculus of forces appliying both equilibriums' equations. 
 Lift = W_M+W_D+W_C+W_B+W_A;
-Weight = Lift;
-x_cg=(W_D*2*W+W_C*W+W_B*0+W_A*0)/Weight;
-z_cg=(W_D*H+W_C*H+W_B*H+W_A*0)/Weight;
+Weight = Lift;  % This is W_T
+x_cg=(W_D*2*W+W_C*W+W_B*0+W_A*0+W_M*0)/Weight;
+z_cg=(W_D*H+W_C*H+W_B*H+W_A*0+W_M*0)/Weight;
 
 
 syms Thrust
