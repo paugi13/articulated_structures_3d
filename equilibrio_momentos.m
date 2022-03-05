@@ -1,4 +1,4 @@
-function [Thrust,Lift,Drag,Weight,x_cg,z_cg] = equilibrio_momentos(F_bar,W_M,H,W)
+function [Thrust,Lift,Drag,Weight,x_cg,z_cg, W_C, W_D] = equilibrio_momentos(F_bar,W_M,H,W)
 %UNTITLED11 Summary of this function goes here
 %   Detailed explanation goes here
 W_D = 0;
