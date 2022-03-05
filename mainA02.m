@@ -79,20 +79,23 @@ Tmat = [1;1;1;1;1;1;1;1;1;1;1;2;2;2;2;2;2
 ];
 
 %% Definition of fixed nodes
-fixNod = [1 1 0;
-    2 2 0;
-    3 3 0;
+% Suitable fixed nodes must be defined in order to limit every possible
+% movement of the structure. 
+fixNod = [1 3 0;
+    4 2 0;
     4 3 0;
-    5 2 0;
-    6 1 0
+    3 1 0;
+    3 2 0;
+    3 3 0;
 ];
 
-% 1 3 0;
-%     4 2 0;
-%     4 3 0;
-%     3 1 0;
-%     3 2 0;
+% Other possible combinations
+% 1 1 0;
+%     2 2 0;
 %     3 3 0;
+%     4 3 0;
+%     5 2 0;
+%     6 1 0
 
 %% Main structure parameters
 n_d = size(x,2);              % Number of dimensions
@@ -107,21 +110,21 @@ n_el_dof = n_i*n_nod;         % Number of DOFs for each element
 W_M = 9.81*M;
 Td = connectDOFs(n_el,n_nod,n_i,Tnod);
 F_bar = density_calc(x,mat, Tmat, n_el, Td, Tnod);
-[T,L,D,W_T,x_cg,z_cg] = equilibrio_momentos(F_bar,W_M,H,W);
+[T,L,D,W_T,x_cg,z_cg, W_C, W_D] = equilibrio_momentos(F_bar,W_M,H,W);
 
 % SUDDEN BURST
 SB=1; %Number 1 activates the calculation for a sudden gust of wind
-[T,D,L,Fax,Faz] = suddenBurst(SB,x_cg,z_cg,D,L,W_T,W,H,T);
+[T,D,L,Fax,Faz] = suddenBurst(SB,x_cg,z_cg,D,L,W_T,W,H,T, W_C, W_D);
 
 Fax = Fax/7;
 Faz = Faz/7;
-Fdata = [1 3 (-W_M/2)+Faz;
-    2 6 (-W_M/2)+Faz;
-    3 9 (L/5)+Faz;
-    4 12 (L/5)+Faz;
-    5 15 (L/5)+Faz;
-    6 18 (L/5)+Faz;
-    7 21 (L/5)+Faz;
+Fdata = [1 3 (-W_M/2)-Faz;
+    2 6 (-W_M/2)-Faz;
+    3 9 (L/5)-Faz;
+    4 12 (L/5)-Faz;
+    5 15 (L/5)-Faz;
+    6 18 (L/5)-Faz;
+    7 21 (L/5)-Faz;
     3 7 (-D/5)+Fax;
     4 10 (-D/5)+Fax;
     5 13 (-D/5)+Fax;
