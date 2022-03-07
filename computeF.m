@@ -1,4 +1,4 @@
-function Fext = computeF(n_i,n_dof,Fdata, Fbar)
+function Fext = computeF(n_i,n_dof,Fdata, Fbar, ax, az)
 %--------------------------------------------------------------------------
 % The function takes as inputs:
 %   - Dimensions:  n_i         Number of DOFs per node
@@ -27,5 +27,7 @@ end
 for i=1:size(Fbar,1)
 % The value is added again because of the bars' densities calculus, that
 % add themselves on the nodes. 
-Fext(Fbar(i,2)) = Fext(Fbar(i,2)) + Fbar(i,3);
+
+Fext(Fbar(i,2)-2) = Fext(Fbar(i,2)-2) + (-Fbar(i,3)/9.81)*ax;
+Fext(Fbar(i,2)) = Fext(Fbar(i,2)) + Fbar(i,3) - (-Fbar(i,3)/9.81)*az;
 end

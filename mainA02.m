@@ -88,14 +88,14 @@ fixNod = [1 3 0;
     3 2 0;
     3 3 0;
 ];
-
-% Other possible combinations
+% 
 % 1 1 0;
 %     2 2 0;
 %     3 3 0;
 %     4 3 0;
 %     5 2 0;
 %     6 1 0
+% Other possible combinations
 
 %% Main structure parameters
 n_d = size(x,2);              % Number of dimensions
@@ -116,22 +116,22 @@ F_bar = density_calc(x,mat, Tmat, n_el, Td, Tnod);
 SB=1; %Number 1 activates the calculation for a sudden gust of wind
 [T,D,L,Fax,Faz] = suddenBurst(SB,x_cg,z_cg,D,L,W_T,W,H,T, W_C, W_D);
 
-Fax = Fax/7;
-Faz = Faz/7;
-Fdata = [1 3 (-W_M/2)-Faz;
-    2 6 (-W_M/2)-Faz;
-    3 9 (L/5)-Faz;
-    4 12 (L/5)-Faz;
-    5 15 (L/5)-Faz;
-    6 18 (L/5)-Faz;
-    7 21 (L/5)-Faz;
-    3 7 (-D/5)+Fax;
-    4 10 (-D/5)+Fax;
-    5 13 (-D/5)+Fax;
-    6 16 (-D/5)+Fax;
-    7 19 (-D/5)+Fax;
-    1 1 (T/2)+Fax;
-    2 4 (T/2)+Fax;
+ax = Fax/(W_T/9.81);
+az = Faz/(W_T/9.81);
+Fdata = [1 3 (-W_M/2)-(W_M/(2*9.81))*az;
+    2 6 (-W_M/2)-(W_M/(2*9.81))*az;
+    3 9 (L/5);
+    4 12 (L/5);
+    5 15 (L/5);
+    6 18 (L/5);
+    7 21 (L/5);
+    3 7 (-D/5);
+    4 10 (-D/5);
+    5 13 (-D/5);
+    6 16 (-D/5);
+    7 19 (-D/5);
+    1 1 (T/2)+(W_M/(2*9.81))*ax;
+    2 4 (T/2)+(W_M/(2*9.81))*ax;
 ];
 
 
@@ -139,7 +139,7 @@ Fdata = [1 3 (-W_M/2)-Faz;
 %% SOLVER
 K_e = computeKelBar(n_d,n_el,x,Tnod,mat,Tmat);
 KG = assemblyKG(n_el,n_el_dof,n_dof,Td,K_e);
-Fext = computeF(n_i,n_dof, Fdata, F_bar);
+Fext = computeF(n_i,n_dof, Fdata, F_bar, ax ,az);
 [vL,vR,uR] = applyCond(n_i,n_dof,fixNod);
 [u,R] = solveSys(vL,vR,uR,KG,Fext);
 [eps,sig, E_e, l_e] = computeStrainStressBar(n_d,n_el,u,Td,x,Tnod,mat,Tmat);
