@@ -11,11 +11,14 @@ if SB==1
     % selected point of application
     % Resultant forces are considered intern, so they point to the opposite
     % direction, wich is the exterior and the one we would see. 
-    syms Fax    
-    eqn = D*H - 5*Fax/7*H + W_C*W + W_D*2*W == (7/5)*L*W - 6*Faz*W/7 - Faz*W/7;
-    Fax = vpasolve(eqn,Fax);
-%   Fax = ((7/5)*L*W+Faz*x_cg - W_T*x_cg - D*H)/z_cg;
-    T=D-Fax;
+%     syms Fax    
+%     eqn = D*H - 5*Fax/7*H + W_C*W + W_D*2*W == (7/5)*L*W - 6*Faz*W/7 - Faz*W/7;
+%     Fax = vpasolve(eqn,Fax);
+    syms T
+    eq = 3*L/5*(2*W-x_cg) + L/5*(W-x_cg)  == D*(H-z_cg) + T*z_cg + L/5*x_cg;
+    T = vpasolve(eq, T);
+%     Fax = ((7/5)*L*W+Faz*x_cg - W_T*x_cg - D*H)/z_cg;
+    Fax=D-T;
 end
 
 %SB is an auxiliar variable whose function if to apply the sudden burst or
