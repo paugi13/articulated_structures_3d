@@ -154,3 +154,7 @@ scale = 100; % Adjust this parameter for properly visualizing the deformation
 plotBarStress3D(x,Tnod,u,sig,scale);
 
 
+%% ----------------------------------------------------------------------
+% Canvi en arxiu assemblyKG.
+
+% -----------------------------------------------------------------------
