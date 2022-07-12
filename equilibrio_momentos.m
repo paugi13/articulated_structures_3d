@@ -35,3 +35,5 @@ Thrust = vpasolve(eqn, Thrust);
 Drag = Thrust;
 end
 
+% Canvi en el segon arxiu
+
