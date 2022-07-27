@@ -60,6 +60,10 @@ end
 %matrix with too many 0 --> Everything lays on the distribution of vR.
 
 vector = F_ext_L - KLR*uR;
+object = DirectSolver;
+object.KLL = KLL;
+object.vector = vector;
+
 choice = input('Resolució per mètode directe(1) o iteratiu(2): ?');
 
 switch choice
@@ -69,10 +73,8 @@ switch choice
         object.vector = vector;
         uL = directsolver(object);
     case 2
-        object = IterativeSolver;
-        object.KLL = KLL;
-        object.vector = vector;
-        uL = directsolver(object);
+        
+        
 end
 
 % Line to change
