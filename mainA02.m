@@ -27,6 +27,8 @@ g = 9.81;
 
 %% PREPROCESS
 
+tests = unitTesting;
+
 % Nodal coordinates matrix 
 %  x(a,j) = coordinate of node a in the dimension j
 x = [%     X      Y      Z
@@ -41,23 +43,8 @@ x = [%     X      Y      Z
 
 % Nodal connectivities  
 %  Tnod(e,a) = global nodal number associated to node a of element e
-Tnod = [1 2
-        1 3
-        2 3
-        3 5
-        3 6
-        3 7
-        4 5
-        4 6
-        4 7
-        5 7
-        6 7
-        1 4
-        1 5
-        1 7
-        2 4
-        2 6
-        2 7   
+Tnod = [1 2; 1 3; 2 3; 3 5; 3 6; 3 7; 4 5; 4 6; 4 7; 5 7; 6 7; 1 4; 1 5; ...
+    1 7; 2 4; 2 6; 2 7  
 ];     
 
 % Material properties matrix
@@ -103,6 +90,12 @@ n_el_dof = n_i*n_nod;         % Number of DOFs for each element
 Td = connectDOFs(n_el,n_nod,n_i,Tnod);
 K_e = computeKelBar(n_d,n_el,x,Tnod,mat,Tmat);
 KG = assemblyKG(n_el,n_el_dof,n_dof,Td,K_e);
+
+% UNIT TESTING 1: KG ASSEMBLY
+tests.KG = KG;
+testKGmatrix(tests);
+% --------------------------- 
+
 F_bar = density_calc(x,mat, Tmat, n_el, Td, Tnod);
 [T,L,D,W_T,x_cg,z_cg] =  equilibrio_momentos(F_bar,W_M,H,W);
 
@@ -135,6 +128,12 @@ Fdata = [1 3 -W_M/2;
 Fext = computeF(n_i,n_dof, Fdata, F_bar);
 [vL,vR,uR] = applyCond(n_i,n_dof,fixNod);
 [u,R] = solveSys(vL,vR,uR,KG,Fext);
+
+% UNIT TESTING 2: REACTIONS (TOTAL FORCE)
+tests.R = R;
+testForces(tests);
+% ---------------------------------------
+
 [eps,sig, E_e, l_e] = computeStrainStressBar(n_d,n_el,u,Td,x,Tnod,mat,Tmat);
 
 %% POSTPROCESS

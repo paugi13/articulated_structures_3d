@@ -60,7 +60,7 @@ end
 %matrix with too many 0 --> Everything lays on the distribution of vR.
 
 vector = F_ext_L - KLR*uR;
-choice = input('Resolució per mètode directe(1) o iteratiu(2): ?');
+choice = input('Resolució per mètode directe(1) o iteratiu(2)?: ');
 
 switch choice
     case 1
