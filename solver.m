@@ -3,5 +3,6 @@ classdef solver
     properties (Access = protected)
         KLL
         vector
+        KG
     end
 end
