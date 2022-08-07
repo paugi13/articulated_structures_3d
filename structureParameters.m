@@ -5,6 +5,7 @@ classdef structureParameters
     properties (Access = public)
         KG
         R
+        u
     end
     
     methods

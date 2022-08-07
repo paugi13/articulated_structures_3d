@@ -127,20 +127,26 @@ Fdata = [1 3 -W_M/2;
 
 Fext = computeF(n_i,n_dof, Fdata, F_bar);
 [vL,vR,uR] = applyCond(n_i,n_dof,fixNod);
-[u,R] = solveSys(vL,vR,uR,KG,Fext);
+[u_method,R] = solveSys(vL,vR,uR,KG,Fext);
+tests.u = u_method;
 
 % UNIT TESTING 2: REACTIONS (TOTAL FORCE)
 tests.R = R;
 testForces(tests);
 % ---------------------------------------
 
-[eps,sig, E_e, l_e] = computeStrainStressBar(n_d,n_el,u,Td,x,Tnod,mat,Tmat);
+
+
+% UNIT TESTING 3: DISPLACEMENTS
+
+% ---------------------------------------
+[eps,sig, E_e, l_e] = computeStrainStressBar(n_d,n_el,u_method,Td,x,Tnod,mat,Tmat);
 
 %% POSTPROCESS
 
 % Plot deformed structure with stress of each bar
 scale = 100; % Adjust this parameter for properly visualizing the deformation
-plotBarStress3D(x,Tnod,u,sig,scale);
+plotBarStress3D(x,Tnod,u_method,sig,scale);
 
 
 % Critical stress for buckling.
