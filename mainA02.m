@@ -138,8 +138,12 @@ testForces(tests);
 
 
 % UNIT TESTING 3: DISPLACEMENTS
-
+testDisplacements(u, tests);
 % ---------------------------------------
+
+
+
+
 [eps,sig, E_e, l_e] = computeStrainStressBar(n_d,n_el,u_method,Td,x,Tnod,mat,Tmat);
 
 %% POSTPROCESS
