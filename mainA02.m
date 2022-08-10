@@ -93,7 +93,7 @@ KG = assemblyKG(n_el,n_el_dof,n_dof,Td,K_e);
 
 % UNIT TESTING 1: KG ASSEMBLY
 tests.KG = KG;
-testKGmatrix(tests);
+tests.testKGmatrix();
 % --------------------------- 
 
 F_bar = density_calc(x,mat, Tmat, n_el, Td, Tnod);
@@ -138,7 +138,7 @@ testForces(tests);
 
 
 % UNIT TESTING 3: DISPLACEMENTS
-testDisplacements(u, tests);
+testDisplacements(tests);
 % ---------------------------------------
 
 

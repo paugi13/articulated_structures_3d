@@ -25,8 +25,9 @@ classdef unitTesting < structureParameters
             assert(b == 0, 'Reaction forces are appearing');
         end
         
-        function testDisplacements(u, obj)
+        function testDisplacements(obj)
             b=0;
+            load('test3_variable_u');
            for i = 1:size(obj.u,1)
                if abs(obj.u(i)-u(i)) > 1e-6
                     b = 1;
