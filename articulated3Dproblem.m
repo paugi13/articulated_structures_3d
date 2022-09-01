@@ -51,10 +51,21 @@ classdef articulated3Dproblem < problemDef
             obj.x = objPD.x;
             obj.Tnod = objPD.Tnod;
             obj.fixNod = objPD.fixNod;
+            obj.n_d = objPD.n_d;
+            obj.n = objPD.n;
+            obj.n_i = objPD.n_i;
+            obj.n_dof = objPD.n_dof;
+            obj.n_el = objPD.n_el;
+            obj.n_nod = objPD.n_nod;
+            obj.n_el_dof = objPD.n_el_dof;
+            obj.Td = objPD.Td;
+            obj.mat = objPD.mat;
+            obj.Tmat = objPD.Tmat;
         end
         
         function asssembleKG(obj)
-            obj.K_e = computeKelBar(n_d,n_el,x,Tnod,mat,Tmat);
+            obj.K_e = computeKelBar(obj.n_d,obj.n_el,obj.x,obj.Tnod,obj.mat...
+                ,obj.Tmat);
             obj.KG = assemblyKG(obj.n_el,obj.n_el_dof,obj.n_dof,obj.Td,...
                 obj.K_e);
         end
@@ -65,9 +76,11 @@ classdef articulated3Dproblem < problemDef
         
         function computeF(obj)
             F_bar = density_calc(x,mat, Tmat, obj.n_el, obj.Td, obj.Tnod);
+            % this restricts it to the mentioned geometry. Won't solve it
+            % for any structure. 
             [T,L,D,~,~,~] =  equilibrio_momentos(F_bar,...
-                W_M,H,W);
-            Fdata = computeFdata(W_M, L, D, T); % restricts it to the mentioned geommetry
+                W_M,obj.H,obj.W);
+            Fdata = computeFdata(W_M, L, D, T); 
             obj.Fext = computeF(obj.n_i,obj.n_dof, Fdata, F_bar);
         end
     end
