@@ -1,4 +1,4 @@
-function Td = connectDOFs(n_el,n_nod,n_i,Tn)
+function Td = connectDOFs(n_el,n_nod,n_i,Tnod)
 %--------------------------------------------------------------------------
 % The function takes as inputs:
 %   - Dimensions:  n_el     Total number of elements
@@ -15,7 +15,7 @@ function Td = connectDOFs(n_el,n_nod,n_i,Tn)
 Td = zeros(n_el, n_i*n_nod);
 
 for i=1:n_el
-    Td(i,:) = [Tn(i,1)*3-2 Tn(i,1)*3-1 Tn(i,1)*3 Tn(i,2)*3-2 Tn(i,2)*3-1 Tn(i,2)*3];
+    Td(i,:) = [Tnod(i,1)*3-2 Tnod(i,1)*3-1 Tnod(i,1)*3 Tnod(i,2)*3-2 Tnod(i,2)*3-1 Tnod(i,2)*3];
 end
 
 % Td = [1 2 3 4;
