@@ -16,23 +16,42 @@ classdef articulated3Dproblem < problemDef
     end
     
     methods (Access = public)
-        function obj = initializeProblem()
-            
+        function obj = initializeProblem(objPD)
+            obj.initialize(objPD);
         end
         
         function solver(obj)
             obj.assembleKG();
             obj.applyConditions();
             obj.computeF();
-            [obj.u_method,obj.R] = solveSys(vL,vR,uR,obj.KG,obj.Fext);
-            [obj.eps,obj.sig] = computeStrainStressBar(n_d,...
-                n_el,obj.u_method,Td,x,Tnod,mat,Tmat);
+            obj.solveSystem();
+            obj.computeResults();
         end
-       
-        
     end
     
     methods (Access = private)
+        function solveSystem(obj)
+            [obj.u_method,obj.R] = solveSys(obj.vL,obj.vR,obj.uR,...
+                obj.KG,obj.Fext);
+        end
+        
+        function computeResults(obj)
+            [obj.eps,obj.sig] = computeStrainStressBar(obj.n_d,...
+                obj.n_el,obj.u_method,obj.Td,obj.x,obj.Tnod,mat,Tmat);
+        end
+        
+        function initialize(obj, objPD)
+            obj.H = objPD.H;
+            obj.W = objPD.W;
+            obj.B = objPD.B;
+            obj.D1 = objPD.D1;
+            obj.d1 = objPD.d1;
+            obj.D2 = objPD.D2;
+            obj.M = objPD.M;
+            obj.x = objPD.x;
+            obj.Tnod = objPD.Tnod;
+            obj.fixNod = objPD.fixNod;
+        end
         
         function asssembleKG(obj)
             obj.K_e = computeKelBar(n_d,n_el,x,Tnod,mat,Tmat);
@@ -48,7 +67,7 @@ classdef articulated3Dproblem < problemDef
             F_bar = density_calc(x,mat, Tmat, obj.n_el, obj.Td, obj.Tnod);
             [T,L,D,~,~,~] =  equilibrio_momentos(F_bar,...
                 W_M,H,W);
-            Fdata = computeFdata(W_M, L, D, T);
+            Fdata = computeFdata(W_M, L, D, T); % restricts it to the mentioned geommetry
             obj.Fext = computeF(obj.n_i,obj.n_dof, Fdata, F_bar);
         end
     end

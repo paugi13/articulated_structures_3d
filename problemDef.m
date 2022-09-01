@@ -7,7 +7,7 @@ classdef problemDef < handle
         g = 9.81
     end
     
-    properties (Access = public)
+    properties (Access = private)
         % Problem's geommetry
         H
         W
