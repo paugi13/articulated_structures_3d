@@ -27,6 +27,10 @@ classdef articulated3Dproblem < problemDef
             obj.solveSystem();
             obj.computeResults();
         end
+        
+        function plotting(obj)
+            obj.plot3D();
+        end
     end
     
     methods (Access = private)
@@ -83,6 +87,12 @@ classdef articulated3Dproblem < problemDef
             Fdata = computeFdata(W_M, L, D, T); 
             obj.Fext = computeF(obj.n_i,obj.n_dof, Fdata, F_bar);
         end
+        
+        function plot3D(obj)
+           scale = 100;
+           plotBarStress3D(obj.x,obj.Tnod,obj.u_method,obj.sig,scale); 
+        end
+            
     end
     
     
