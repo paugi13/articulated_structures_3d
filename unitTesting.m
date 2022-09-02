@@ -2,17 +2,17 @@ classdef unitTesting < articulated3Dproblem
     %UNTITLED2 Summary of this class goes here
     %   Detailed explanation goes here
     
-    properties
-        KG
-        R
-        u
+    properties (Access = public)
+        K_G
+        react
+        U
     end
     
     methods
-        function obj = testInitializer(artObj)
-            obj.KG = artObj.KG;
-            obj.R = artObj.R;
-            obj.u = artObj.u;
+        function obj = unitTesting(artObj)
+            obj.K_G = artObj.KG;
+            obj.react = artObj.R;
+            obj.U = artObj.u_method;
         end
         
         function testKGmatrix(obj)
@@ -21,9 +21,9 @@ classdef unitTesting < articulated3Dproblem
         % checked instead. 
         load('test3_variable_u');
         b = 0;
-        for i = 1:size(KG,1)
-           for j = 1:size(KG,2)
-                if abs(obj.KG(i,j)-KG(i,j)) > 1e-6
+        for i = 1:size(obj.K_G,1)
+           for j = 1:size(obj.K_G,2)
+                if abs(obj.K_G(i,j)-KG(i,j)) > 1e-6
                     b = 1;
                 end
            end
@@ -33,8 +33,8 @@ classdef unitTesting < articulated3Dproblem
         
         function testForces(obj)
             b = 0;
-            for i=1:size(obj.R,1)
-                if obj.R(i) > 1e-6
+            for i=1:size(obj.react,1)
+                if obj.react(i) > 1e-6
                     b = 1;
                 end
             end
@@ -44,8 +44,8 @@ classdef unitTesting < articulated3Dproblem
         function testDisplacements(obj)
             b=0;
             load('test3_variable_u');
-           for i = 1:size(obj.u,1)
-               if abs(obj.u(i)-u(i)) > 1e-6
+           for i = 1:size(obj.U,1)
+               if abs(obj.U(i)-u(i)) > 1e-6
                     b = 1;
                 end
            end
