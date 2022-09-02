@@ -48,38 +48,30 @@ classdef articulated3Dproblem < problemDef
             [obj.eps,obj.sig] = computeStrainStressBar(obj.n_d,...
                 obj.n_el,obj.u_method,obj.Td,obj.x,obj.Tnod,obj.mat,obj.Tmat);
         end
-            
-        % Not possible because these properties could only be modified
-        % through specific methods and now they are defined as constant for
-        % all inheritant classes. 
-%         function initialize(obj, objPD)
-%             obj.H = objPD.H;
-%             obj.W = objPD.W;
-%             obj.B = objPD.B;
-%             obj.D1 = objPD.D1;
-%             obj.d1 = objPD.d1;
-%             obj.D2 = objPD.D2;
-%             obj.M = objPD.M;
-%             obj.x = objPD.x;
-%             obj.Tnod = objPD.Tnod;
-%             obj.fixNod = objPD.fixNod;
-%             obj.n_d = objPD.n_d;
-%             obj.n = objPD.n;
-%             obj.n_i = objPD.n_i;
-%             obj.n_dof = objPD.n_dof;
-%             obj.n_el = objPD.n_el;
-%             obj.n_nod = objPD.n_nod;
-%             obj.n_el_dof = objPD.n_el_dof;
-%             obj.Td = objPD.Td;
-%             obj.mat = objPD.mat;
-%             obj.Tmat = objPD.Tmat;
-%         end
         
         function assembleKG(obj)
-            obj.K_e = computeKelBar(obj.n_d,obj.n_el,obj.x,obj.Tnod,obj.mat...
-                ,obj.Tmat);
-            obj.KG = assemblyKG(obj.n_el,obj.n_el_dof,obj.n_dof,obj.Td,...
-                obj.K_e);
+            s.n_d = obj.n_d;
+            s.n_el = obj.n_el;
+            s.x = obj.x;
+            s.Tnod = obj.Tnod;
+            s.mat = obj.mat;
+            s.Tmat = obj.Tmat;
+            
+            % Stiffness matrix for every element
+            ke_comp = ElementalStiffnessMat(s);
+            ke_comp.computeKel();
+            obj.K_e = ke_comp.K_e;
+            
+            % Global stiffness matrix assembly
+            s.n_el_dof = obj.n_el_dof;
+            s.n_dof = obj.n_dof;
+            s.n_el = obj.n_el;
+            s.K_e = obj.K_e;
+            s.Td = obj.Td;
+            
+            KG_assembler = KGassembler(s);
+            KG_assembler.assembleMatrix();
+            obj.KG = KG_assembler.Kg;
         end
         
         function applyConditions(obj)
