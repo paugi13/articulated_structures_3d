@@ -64,10 +64,10 @@ classdef articulated3Dproblem < problemDef
             
             % Global stiffness matrix assembly
             s.n_el_dof = obj.n_el_dof;
-            s.n_dof = obj.n_dof;
-            s.n_el = obj.n_el;
-            s.K_e = obj.K_e;
-            s.Td = obj.Td;
+            s.n_dof    = obj.n_dof;
+            s.n_el     = obj.n_el;
+            s.K_e      = obj.K_e;
+            s.Td       = obj.Td;
             
             KG_assembler = KGassembler(s);
             KG_assembler.assembleMatrix();
@@ -79,11 +79,34 @@ classdef articulated3Dproblem < problemDef
         end
         
         function computeF(obj)
-            F_bar = density_calc(obj.x,obj.mat, obj.Tmat, obj.n_el, obj.Td, obj.Tnod);
-            % this restricts it to the mentioned geometry. Won't solve it
-            % for any structure. 
-            [T,L,D,~,~,~] =  equilibrio_momentos(F_bar,...
-                obj.W_M,obj.H,obj.W);
+            s.x    = obj.x;
+            s.mat  = obj.mat;
+            s.Tmat = obj.Tmat;
+            s.n_el = obj.n_el;
+            s.Td   = obj.Td;
+            s.Tnod = obj.Tnod;
+            s.W_M = obj.W_M;
+            s.H = obj.H;
+            s.W = obj.W;
+            s.n_i = obj.n_i;
+            s.n_dof = obj.n_dof;
+            
+            weights_calculus = DensityWeightCalculator(s);
+            weights_calculus.calculateWeights();
+            F_bar = weights_calculus.Fbar;
+           
+            s.Fbar = F_bar;
+            
+            forcesCalc = ForcesEquilibriumCalculator(s);
+            forcesCalc.calculator();
+            T = forcesCalc.T;
+            L = forcesCalc.L;
+            D = forcesCalc.D;
+
+            s.T = T;
+            s.L = L;
+            s.D = D;
+            
             Fdata = computeFdata(obj.W_M, L, D, T); 
             obj.Fext = computeF(obj.n_i,obj.n_dof, Fdata, F_bar);
         end
