@@ -2,7 +2,7 @@ classdef articulated3Dproblem < problemDef
     %UNTITLED Summary of this class goes here
     %   Detailed explanation goes here
     
-    properties (Access = private)
+    properties (Access = protected)
         % Properties related to problem resolution
         KG
         K_e
