@@ -1,15 +1,20 @@
 classdef Articulated3Dproblem < handle
     % Class that directly solves the problem
     
+    
+    properties (Access = public)
+        % Properties to be used by external functions. For example, unit
+        % testing class.
+        KG
+        R
+        u_method
+    end
+    
     properties (Access = protected)
         % Properties related to problem resolution
-        KG
         K_e
         
         Fext
-        
-        R
-        u_method
         
         eps
         sig
