@@ -9,9 +9,12 @@ clear all
 
 %% Definition and solution of the problem
 
+num_data = load('numerical_inputs_articulated_3D.mat');
+% prob = ProblemDef(num_data);
+
 % mainGeometry contains the main information of the problem.
 % articulated3Gproblem is created to actually SOLVE the problem.
-problemSolver = articulated3Dproblem;
+problemSolver = Articulated3Dproblem(num_data);
 problemSolver.solver();
 problemSolver.plotting();
 
