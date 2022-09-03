@@ -34,7 +34,9 @@ classdef AllForceComputing < handle
             for i=1:size(obj.Fdata,1)
             % The value is added again because of the bars' densities calculus, that
             % add themselves on the nodes. 
-            Fext(obj.Fdata(i,2)) = Fext(obj.Fdata(i,2)) + obj.Fdata(i,3);
+            dof = obj.Fdata(i,2); 
+            val = obj.Fdata(i,3);
+            Fext(dof) = Fext(dof) + val;
             end
         end
         
@@ -43,7 +45,9 @@ classdef AllForceComputing < handle
             for i=1:size(obj.Fbar,1)
             % The value is added again because of the bars' densities calculus, that
             % add themselves on the nodes. 
-            Fext(obj.Fbar(i,2)) = Fext(obj.Fbar(i,2)) + obj.Fbar(i,3);
+            dof = obj.Fbar(i,2);
+            val = obj.Fbar(i,3);
+            Fext(dof) = Fext(dof) + val;
             end
         end
          
