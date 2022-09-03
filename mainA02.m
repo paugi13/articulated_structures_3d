@@ -21,13 +21,14 @@ D2 = 0.003;
 
 % Mass
 M = 150;
-W_M = 9.81*M;
-% Other
 g = 9.81;
+W_M = g*M;
+% Other
+
 
 %% PREPROCESS
 
-tests = unitTesting;
+% tests = unitTesting;
 
 % Nodal coordinates matrix 
 %  x(a,j) = coordinate of node a in the dimension j
