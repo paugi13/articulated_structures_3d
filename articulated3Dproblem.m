@@ -43,20 +43,41 @@ classdef Articulated3Dproblem < handle
         end
     end
     
+    %% Private access methods
     methods (Access = private)
         function init(obj, cParams)
             obj.var_struct = cParams;
         end
         
         function solveSystem(obj)
-            [obj.u_method,obj.R] = solveSys(obj.vL,obj.vR,obj.uR,...
-                obj.KG,obj.Fext);
+            s.vL = obj.vL;
+            s.vR = obj.vR;
+            s.uR = obj.uR;
+            s.KG = obj.KG;
+            s.Fext = obj.Fext;
+            
+            solver = SystemSolver(s);
+            solver.solveSystem();
+            obj.u_method = solver.u_solv;
+            obj.R = solver.R_solv;
         end
         
         function computeResults(obj)
-            [obj.eps,obj.sig] = computeStrainStressBar(obj.var_struct.n_d,...
-                obj.var_struct.n_el,obj.u_method,obj.Td,obj.var_struct.x,...
-                obj.var_struct.Tnod,obj.var_struct.mat,obj.var_struct.Tmat);
+            s.n_d = obj.var_struct.n_d;
+            s.n_el = obj.var_struct.n_el;
+            s.u_method = obj.u_method;
+            s.Td = obj.Td;
+            s.x = obj.var_struct.x;     
+            s.Tnod = obj.var_struct.Tnod;
+            s.mat = obj.var_struct.mat;
+            s.Tmat = obj.var_struct.Tmat;
+            
+            finalStrainStress = StrainStressComputer(s);
+            finalStrainStress.computeStrainStress();
+            
+            obj.eps = finalStrainStress.eps_comp;
+            obj.sig = finalStrainStress.sig_comp;
+            
         end
         
         function connectDofs(obj)
@@ -95,7 +116,8 @@ classdef Articulated3Dproblem < handle
         end
         
         function applyConditions(obj)
-            [obj.vL,obj.vR,obj.uR] = applyCond(obj.var_struct.n_i,obj.var_struct.n_dof,obj.var_struct.fixNod);
+            [obj.vL,obj.vR,obj.uR] = applyCond(obj.var_struct.n_i,...
+                obj.var_struct.n_dof,obj.var_struct.fixNod);
         end
         
         function computeF(obj)
