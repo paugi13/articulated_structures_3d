@@ -107,8 +107,15 @@ classdef articulated3Dproblem < problemDef
             s.L = L;
             s.D = D;
             
-            Fdata = computeFdata(obj.W_M, L, D, T); 
-            obj.Fext = computeF(obj.n_i,obj.n_dof, Fdata, F_bar);
+            F_assembler = FdataAssembler(s);
+            F_assembler.forceMatrixAssembly();
+            Fdata = F_assembler.Fdata;
+            s.Fdata = Fdata;
+            
+            totalForceAssembler = AllForceComputing(s);
+            totalForceAssembler.computeAllForces();
+            obj.Fext = totalForceAssembler.Fext_complete;
+            
         end
         
         function plot3D(obj)
