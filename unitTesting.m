@@ -1,4 +1,4 @@
-classdef unitTesting < articulated3Dproblem
+classdef unitTesting < Articulated3Dproblem
     %UNTITLED2 Summary of this class goes here
     %   Detailed explanation goes here
     
