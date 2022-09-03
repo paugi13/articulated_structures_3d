@@ -118,9 +118,13 @@ classdef articulated3Dproblem < problemDef
             
         end
         
-        function plot3D(obj)
-           scale = 100;
-           plotBarStress3D(obj.x,obj.Tnod,obj.u_method,obj.sig,scale); 
+        function plot3D(obj) 
+            s.Tnod = obj.Tnod;
+            s.u = obj.u_method;
+            s.sig = obj.sig;
+            s.x = obj.x;
+            setPlot = PlotterClass(s);
+            setPlot.plotResults();
         end
             
     end
