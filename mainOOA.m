@@ -2,7 +2,7 @@
 % Results should be the same as the ones obtained through the imperative
 % approach. Therefore all tests should pass. 
 clc
-clear all
+clear
 
 %% Numerical values
 
