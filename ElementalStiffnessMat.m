@@ -26,10 +26,10 @@ classdef ElementalStiffnessMat < handle
             Ke = zeros(2*obj.n_d, 2*obj.n_d, obj.n_el);
             for i=1:obj.n_el
                 [x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e] = obj.getCoords(i);
-                l_e = obj.calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e);
-                R_e = calculateRotMatrix(obj, x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e, l_e);
+                l_e = ElementalStiffnessMat.calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e);
+                R_e = ElementalStiffnessMat.calculateRotMatrix(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e, l_e);
                 Kel = KeCalc(obj, i, l_e);
-                Ke(:,:,i) = K_e_Calc(obj, R_e, Kel);
+                Ke(:,:,i) = ElementalStiffnessMat.K_e_Calc(R_e, Kel);
             end
             
             obj.K_e = Ke;
@@ -55,16 +55,6 @@ classdef ElementalStiffnessMat < handle
                 z_2_e= obj.x(obj.Tnod(i,2),3);
         end
         
-        function l_e = calculateBarLength(obj, x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e)
-            l_e= sqrt((x_2_e-x_1_e)^2+(y_2_e-y_1_e)^2+(z_2_e-z_1_e)^2);
-        end
-        
-        function R_e = calculateRotMatrix(obj, x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e, l_e)
-            R_e = 1/l_e*[x_2_e-x_1_e y_2_e-y_1_e z_2_e-z_1_e 0 0 0;
-                            0 0 0 x_2_e-x_1_e y_2_e-y_1_e z_2_e-z_1_e
-                    ];
-        end
-        
         function Kel = KeCalc(obj, i, l_e)
             material = obj.Tmat(i);
             young = obj.mat(material,1);
@@ -72,9 +62,23 @@ classdef ElementalStiffnessMat < handle
             Kel= young*area/l_e*[1 -1; -1 1];
         end
         
-        function K_e = K_e_Calc(obj, R_e, Kel)
+    end
+    
+    methods (Static)
+        function l_e = calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e)
+            l_e= sqrt((x_2_e-x_1_e)^2+(y_2_e-y_1_e)^2+(z_2_e-z_1_e)^2);
+        end
+        
+        function R_e = calculateRotMatrix(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e, l_e)
+            R_e = 1/l_e*[x_2_e-x_1_e y_2_e-y_1_e z_2_e-z_1_e 0 0 0;
+                            0 0 0 x_2_e-x_1_e y_2_e-y_1_e z_2_e-z_1_e
+                    ];
+        end
+        
+        function K_e = K_e_Calc(R_e, Kel)
             K_e = R_e.'*Kel*R_e;
         end
+    
     end
 end
 
