@@ -1,4 +1,4 @@
-classdef Articulated3Dproblem < handle
+classdef Articulated3Dproblem_aux < handle
     % Class that directly solves the problem
     
     
