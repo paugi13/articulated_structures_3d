@@ -121,8 +121,17 @@ classdef Articulated3Dproblem < handle
         end
         
         function applyConditions(obj)
-            [obj.vL,obj.vR,obj.uR] = applyCond(obj.var_struct.n_i,...
-                obj.var_struct.n_dof,obj.var_struct.fixNod);
+            s.n_dof = obj.var_struct.n_dof;
+            s.fixNod = obj.var_struct.fixNod;
+            
+            boundarySetter = BoundaryConditionsSetter(s);
+            boundarySetter.applyConditions();
+            obj.vR = boundarySetter.v_R;
+            obj.uR = boundarySetter.u_R;
+            obj.vL = boundarySetter.v_L;
+            
+%             [obj.vL,obj.vR,obj.uR] = applyCond(obj.var_struct.n_i,...
+%                 obj.var_struct.n_dof,obj.var_struct.fixNod);
         end
         
         function computeF(obj)
