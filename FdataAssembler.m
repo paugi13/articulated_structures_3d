@@ -30,6 +30,7 @@ classdef FdataAssembler < handle
             obj.T = cParams.T;
         end
         function Fdata = assembleMatrix(obj)
+            % C1: Node. C2: DOF. C3: Value
             Fdata = [1 3 -obj.W_M/2;
                 2 6 -obj.W_M/2;
                 3 9 obj.L/5;
