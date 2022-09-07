@@ -103,11 +103,6 @@ classdef Articulated3Dproblem < handle
             s.mat = obj.var_struct.mat;
             s.Tmat = obj.var_struct.Tmat;
             
-            % Stiffness matrix for every element
-            ke_comp = ElementalStiffnessMat(s);
-            ke_comp.computeKel();
-            obj.K_e = ke_comp.K_e;
-            
             % Global stiffness matrix assembly
             s.n_el_dof = obj.var_struct.n_el_dof;
             s.n_dof    = obj.var_struct.n_dof;
@@ -129,9 +124,6 @@ classdef Articulated3Dproblem < handle
             obj.vR = boundarySetter.v_R;
             obj.uR = boundarySetter.u_R;
             obj.vL = boundarySetter.v_L;
-            
-%             [obj.vL,obj.vR,obj.uR] = applyCond(obj.var_struct.n_i,...
-%                 obj.var_struct.n_dof,obj.var_struct.fixNod);
         end
         
         function computeF(obj)
