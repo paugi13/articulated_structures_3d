@@ -46,17 +46,25 @@ classdef BoundaryConditionsSetter < handle
             fixNod_global = zeros(r, c);
             
             for i = 1:size(obj.fixNodes,1) 
-                if obj.fixNodes(i,2) == 1
-                    fixNod_global(i,2) = obj.fixNodes(i,1)*3-2;
+                switch obj.fixNodes(i,2)
+                    case 1
+                        fixNod_global(i,2) = obj.fixNodes(i,1)*3-2;
+                    case 2
+                        fixNod_global(i,2) = obj.fixNodes(i,1)*3-1;
+                    case 3
+                        fixNod_global(i,2) = obj.fixNodes(i,1)*3;
                 end
-
-                if obj.fixNodes(i,2) == 2
-                    fixNod_global(i,2) = obj.fixNodes(i,1)*3-1;
-                end
-
-                if obj.fixNodes(i,2) == 3
-                    fixNod_global(i,2) = obj.fixNodes(i,1)*3;
-                end
+%                 if obj.fixNodes(i,2) == 1
+%                     fixNod_global(i,2) = obj.fixNodes(i,1)*3-2;
+%                 end
+% 
+%                 if obj.fixNodes(i,2) == 2
+%                     fixNod_global(i,2) = obj.fixNodes(i,1)*3-1;
+%                 end
+% 
+%                 if obj.fixNodes(i,2) == 3
+%                     fixNod_global(i,2) = obj.fixNodes(i,1)*3;
+%                 end
             end
         
         end
