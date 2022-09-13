@@ -29,7 +29,7 @@ classdef ElementalStiffnessMat < handle
                 l_e = ElementalStiffnessMat.calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e);
                 R_e = ElementalStiffnessMat.calculateRotMatrix(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e, l_e);
                 Kel = KeCalc(obj, i, l_e);
-                Ke(:,:,i) = ElementalStiffnessMat.K_e_Calc(R_e, Kel);
+                Ke(:,:,i) = ElementalStiffnessMat.assembleKe(R_e, Kel);
             end
             
             obj.K_e = Ke;
@@ -59,7 +59,7 @@ classdef ElementalStiffnessMat < handle
             material = obj.Tmat(i);
             young = obj.mat(material,1);
             area = obj.mat(material,2);
-            Kel= young*area/l_e*[1 -1; -1 1];
+            Kel = young*area/l_e*[1 -1; -1 1];
         end
         
     end
@@ -75,7 +75,7 @@ classdef ElementalStiffnessMat < handle
                     ];
         end
         
-        function K_e = K_e_Calc(R_e, Kel)
+        function K_e = assembleKe(R_e, Kel)
             K_e = R_e.'*Kel*R_e;
         end
     

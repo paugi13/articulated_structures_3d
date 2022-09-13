@@ -28,7 +28,7 @@ classdef DensityWeightCalculator < handle
             
             for i=1:obj.n_el
                 [x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e] = obj.getCoords(i);
-                l_e = obj.calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e);
+                l_e = DensityWeightCalculator.calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e);
                 W_bar = obj.weightCalculator(l_e, i);
                 
                 F_bar_data(j,:) = forceDataMatrix(obj, i, 3, W_bar);
@@ -61,10 +61,6 @@ classdef DensityWeightCalculator < handle
                 z_2_e= obj.x(obj.Tnod(i,2),3);
         end
         
-        function l_e = calculateBarLength(obj, x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e)
-            l_e= sqrt((x_2_e-x_1_e)^2+(y_2_e-y_1_e)^2+(z_2_e-z_1_e)^2);
-        end
-        
         function W_bar = weightCalculator(obj, l_e, i)
             A = obj.mat(obj.Tmat(i),2);
             rho = obj.mat(obj.Tmat(i),3);
@@ -77,6 +73,12 @@ classdef DensityWeightCalculator < handle
         end
         
     
+    end
+    
+    methods (Static)
+        function l_e = calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e)
+            l_e= sqrt((x_2_e-x_1_e)^2+(y_2_e-y_1_e)^2+(z_2_e-z_1_e)^2);
+        end
     end
 end
 

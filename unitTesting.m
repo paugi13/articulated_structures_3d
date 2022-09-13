@@ -12,7 +12,7 @@ classdef unitTesting < handle
         function obj = unitTesting(artObj)
             obj.K_G = artObj.KG;
             obj.react = artObj.R;
-            obj.U = artObj.u_method;
+            obj.U = artObj.uMethod;
         end
         
         function testKGmatrix(obj)

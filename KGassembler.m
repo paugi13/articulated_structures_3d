@@ -28,10 +28,10 @@ classdef KGassembler < handle
            Ke = zeros(2*obj.n_d, 2*obj.n_d, obj.n_el);
             for i=1:obj.n_el
                 [x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e] = obj.getCoords(i);
-                l_e = ElementalStiffnessMat.calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e);
-                R_e = ElementalStiffnessMat.calculateRotMatrix(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e, l_e);
+                l_e = KGassembler.calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e);
+                R_e = KGassembler.calculateRotMatrix(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e, l_e);
                 Kel = KeCalc(obj, i, l_e);
-                Ke(:,:,i) = ElementalStiffnessMat.K_e_Calc(R_e, Kel);
+                Ke(:,:,i) = KGassembler.assembleKe(R_e, Kel);
             end
             
             obj.K_e = Ke; 
@@ -98,7 +98,7 @@ classdef KGassembler < handle
                     ];
         end
         
-        function K_e = K_e_Calc(R_e, Kel)
+        function K_e = assembleKe(R_e, Kel)
             K_e = R_e.'*Kel*R_e;
         end
     

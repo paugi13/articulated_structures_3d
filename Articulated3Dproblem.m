@@ -7,7 +7,7 @@ classdef Articulated3Dproblem < handle
         % testing class.
         KG
         R
-        u_method
+        uMethod
     end
     
     properties (Access = protected)
@@ -26,7 +26,7 @@ classdef Articulated3Dproblem < handle
     end
     
     properties (Access = private)
-        var_struct
+        varStruct
     end
     
     methods (Access = public)
@@ -51,7 +51,7 @@ classdef Articulated3Dproblem < handle
     %% Private access methods
     methods (Access = private)
         function init(obj, cParams)
-            obj.var_struct = cParams;
+            obj.varStruct = cParams;
         end
         
         function solveSystem(obj)
@@ -63,50 +63,50 @@ classdef Articulated3Dproblem < handle
             
             solver = SystemSolver(s);
             solver.solveSystem();
-            obj.u_method = solver.u_solv;
+            obj.uMethod = solver.u_solv;
             obj.R = solver.R_solv;
         end
         
         function computeResults(obj)
-            s.n_d = obj.var_struct.n_d;
-            s.n_el = obj.var_struct.n_el;
-            s.u_method = obj.u_method;
+            s.n_d = obj.varStruct.n_d;
+            s.n_el = obj.varStruct.n_el;
+            s.uMethod = obj.uMethod;
             s.Td = obj.Td;
-            s.x = obj.var_struct.x;     
-            s.Tnod = obj.var_struct.Tnod;
-            s.mat = obj.var_struct.mat;
-            s.Tmat = obj.var_struct.Tmat;
+            s.x = obj.varStruct.x;     
+            s.Tnod = obj.varStruct.Tnod;
+            s.mat = obj.varStruct.mat;
+            s.Tmat = obj.varStruct.Tmat;
             
             finalStrainStress = StrainStressComputer(s);
             finalStrainStress.computeStrainStress();
             
-            obj.eps = finalStrainStress.eps_comp;
-            obj.sig = finalStrainStress.sig_comp;
+            obj.eps = finalStrainStress.epsComp;
+            obj.sig = finalStrainStress.sigComp;
             
         end
         
         function connectDofs(obj)
-            s.n_el = obj.var_struct.n_el;
-            s.n_nod = obj.var_struct.n_nod;
-            s.n_i = obj.var_struct.n_i;
-            s.Tnod = obj.var_struct.Tnod;
+            s.n_el = obj.varStruct.n_el;
+            s.n_nod = obj.varStruct.n_nod;
+            s.n_i = obj.varStruct.n_i;
+            s.Tnod = obj.varStruct.Tnod;
             dofConnection = DofsMatrixAssembler(s);
             dofConnection.assembleTd();
             obj.Td = dofConnection.Td;
         end
         
         function assembleKG(obj)
-            s.n_d = obj.var_struct.n_d;
-            s.n_el = obj.var_struct.n_el;
-            s.x = obj.var_struct.x;
-            s.Tnod = obj.var_struct.Tnod;
-            s.mat = obj.var_struct.mat;
-            s.Tmat = obj.var_struct.Tmat;
+            s.n_d = obj.varStruct.n_d;
+            s.n_el = obj.varStruct.n_el;
+            s.x = obj.varStruct.x;
+            s.Tnod = obj.varStruct.Tnod;
+            s.mat = obj.varStruct.mat;
+            s.Tmat = obj.varStruct.Tmat;
             
             % Global stiffness matrix assembly
-            s.n_el_dof = obj.var_struct.n_el_dof;
-            s.n_dof    = obj.var_struct.n_dof;
-            s.n_el     = obj.var_struct.n_el;
+            s.n_el_dof = obj.varStruct.n_el_dof;
+            s.n_dof    = obj.varStruct.n_dof;
+            s.n_el     = obj.varStruct.n_el;
             s.K_e      = obj.K_e;
             s.Td       = obj.Td;
             
@@ -116,8 +116,8 @@ classdef Articulated3Dproblem < handle
         end
         
         function applyConditions(obj)
-            s.n_dof = obj.var_struct.n_dof;
-            s.fixNod = obj.var_struct.fixNod;
+            s.n_dof = obj.varStruct.n_dof;
+            s.fixNod = obj.varStruct.fixNod;
             
             boundarySetter = BoundaryConditionsSetter(s);
             boundarySetter.applyConditions();
@@ -127,17 +127,17 @@ classdef Articulated3Dproblem < handle
         end
         
         function computeF(obj)
-            s.x    = obj.var_struct.x;
-            s.mat  = obj.var_struct.mat;
-            s.Tmat = obj.var_struct.Tmat;
-            s.n_el = obj.var_struct.n_el;
+            s.x    = obj.varStruct.x;
+            s.mat  = obj.varStruct.mat;
+            s.Tmat = obj.varStruct.Tmat;
+            s.n_el = obj.varStruct.n_el;
             s.Td   = obj.Td;
-            s.Tnod = obj.var_struct.Tnod;
-            s.W_M = obj.var_struct.W_M;
-            s.H = obj.var_struct.H;
-            s.W = obj.var_struct.W;
-            s.n_i = obj.var_struct.n_i;
-            s.n_dof = obj.var_struct.n_dof;
+            s.Tnod = obj.varStruct.Tnod;
+            s.W_M = obj.varStruct.W_M;
+            s.H = obj.varStruct.H;
+            s.W = obj.varStruct.W;
+            s.n_i = obj.varStruct.n_i;
+            s.n_dof = obj.varStruct.n_dof;
             
             weights_calculus = DensityWeightCalculator(s);
             weights_calculus.calculateWeights();
@@ -155,9 +155,9 @@ classdef Articulated3Dproblem < handle
             s.L = L;
             s.D = D;
             
-            F_assembler = FdataAssembler(s);
-            F_assembler.forceMatrixAssembly();
-            Fdata = F_assembler.Fdata;
+            fAssembler = FdataAssembler(s);
+            fAssembler.forceMatrixAssembly();
+            Fdata = fAssembler.Fdata;
             s.Fdata = Fdata;
             
             totalForceAssembler = AllForceComputing(s);
@@ -167,10 +167,10 @@ classdef Articulated3Dproblem < handle
         end
         
         function plot3D(obj) 
-            s.Tnod = obj.var_struct.Tnod;
-            s.u = obj.u_method;
+            s.Tnod = obj.varStruct.Tnod;
+            s.u = obj.uMethod;
             s.sig = obj.sig;
-            s.x = obj.var_struct.x;
+            s.x = obj.varStruct.x;
             setPlot = PlotterClass(s);
             setPlot.plotResults();
         end

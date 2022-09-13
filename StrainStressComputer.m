@@ -3,14 +3,14 @@ classdef StrainStressComputer < handle
     %   Detailed explanation goes here
     
     properties (Access = public)
-        eps_comp
-        sig_comp
+        epsComp
+        sigComp
     end
     
     properties (Access = private)
         n_d
         n_el
-        u_method
+        uMethod
         Td
         x                
         Tnod
@@ -49,7 +49,7 @@ classdef StrainStressComputer < handle
         function init(obj, cParams)
             obj.n_d = cParams.n_d;
             obj.n_el = cParams.n_el;
-            obj.u_method = cParams.u_method;
+            obj.uMethod = cParams.uMethod;
             obj.Td = cParams.Td;
             obj.x = cParams.x;                
             obj.Tnod = cParams.Tnod;
@@ -71,7 +71,7 @@ classdef StrainStressComputer < handle
 
             for i = 1:obj.n_el      %Line selector in Td
                 for j = 1:size(obj.Td,2)    %Column selector in Td
-                    u_global(j, 1, i) = obj.u_method(obj.Td(i, j), 1);
+                    u_global(j, 1, i) = obj.uMethod(obj.Td(i, j), 1);
                 end
             end
         end
@@ -93,8 +93,8 @@ classdef StrainStressComputer < handle
                 eps(i,1) = 1/l_e(i)*[-1 1 ]*u_e_local(:, 1, i);
                 sig(i,1) = E_e(i)*eps(i,1);
             end
-        obj.eps_comp = eps;
-        obj.sig_comp = sig;
+        obj.epsComp = eps;
+        obj.sigComp = sig;
         end
 
     end
