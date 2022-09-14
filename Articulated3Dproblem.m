@@ -63,8 +63,8 @@ classdef Articulated3Dproblem < handle
             
             solver = SystemSolver(s);
             solver.solveSystem();
-            obj.uMethod = solver.u_solv;
-            obj.R = solver.R_solv;
+            obj.uMethod = solver.uSolv;
+            obj.R = solver.RSolv;
         end
         
         function computeResults(obj)
@@ -133,7 +133,7 @@ classdef Articulated3Dproblem < handle
             s.n_el = obj.varStruct.n_el;
             s.Td   = obj.Td;
             s.Tnod = obj.varStruct.Tnod;
-            s.W_M = obj.varStruct.W_M;
+            s.Wm = obj.varStruct.W_M;
             s.H = obj.varStruct.H;
             s.W = obj.varStruct.W;
             s.n_i = obj.varStruct.n_i;
@@ -162,7 +162,7 @@ classdef Articulated3Dproblem < handle
             
             totalForceAssembler = AllForceComputing(s);
             totalForceAssembler.computeAllForces();
-            obj.Fext = totalForceAssembler.Fext_complete;
+            obj.Fext = totalForceAssembler.FextComplete;
             
         end
         
