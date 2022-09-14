@@ -4,6 +4,7 @@ classdef PlotterClass < handle
     properties (Constant)
         scale = 100;
     end
+    
     properties (Access = private)
         nd
         X
