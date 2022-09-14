@@ -1,7 +1,7 @@
 classdef AllForceComputing < handle
    
     properties (Access = public)
-        Fext_complete
+         FextComplete
     end
     
     properties (Access = private)
@@ -17,7 +17,7 @@ classdef AllForceComputing < handle
         
         function computeAllForces(obj)
             Fext = addMainForces(obj);
-            obj.Fext_complete = obj.addBarsWeights(Fext);
+            obj. FextComplete = obj.addBarsWeights(Fext);
         end
     end
     
