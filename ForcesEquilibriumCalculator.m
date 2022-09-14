@@ -9,7 +9,7 @@ classdef ForcesEquilibriumCalculator < handle
     
     properties (Access = private)
         F_bar
-        W_M
+        Wm
         H
         W         
     end
@@ -32,7 +32,7 @@ classdef ForcesEquilibriumCalculator < handle
     methods (Access = private)
         function init(obj, cParams)
             obj.F_bar = cParams.Fbar;
-            obj.W_M = cParams.W_M;
+            obj.Wm = cParams.Wm;
             obj.H = cParams.H;
             obj.W = cParams.W;
         end
@@ -61,7 +61,7 @@ classdef ForcesEquilibriumCalculator < handle
         end
         
         function Lift = liftCalculator(obj, w)
-            Lift = obj.W_M+w.W_D+w.W_C+w.W_B+w.W_A;
+            Lift = obj.Wm+w.W_D+w.W_C+w.W_B+w.W_A;
         end
         
         function [Drag, Thrust] = dragThrustCalculator(obj, w)
