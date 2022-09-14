@@ -3,8 +3,8 @@ classdef SystemSolver < handle
     %   Detailed explanation goes here
     
     properties (Access = public)
-        u_solv
-        R_solv
+        uSolv
+        RSolv
     end
     
     properties (Access = private)
@@ -14,8 +14,8 @@ classdef SystemSolver < handle
         KG
         Fext
         
-        F_ext_L
-        F_ext_R
+        FExtL
+        FExtR
         
         KRR
         KLL
@@ -63,8 +63,8 @@ classdef SystemSolver < handle
             for i = 1:free
                 FextL(i, 1) = obj.Fext(obj.vL(i,1),1);
             end
-        obj.F_ext_L = FextL;
-        obj.F_ext_R = FextR;
+        obj.FExtL = FextL;
+        obj.FExtR = FextR;
         end
         
         function KGDivider(obj)
@@ -105,26 +105,28 @@ classdef SystemSolver < handle
         end
         
         function mainSolver(obj)
-            vect = obj.F_ext_L - obj.KLR*obj.uR;
-            c = input('Resolució per mètode directe(1) o iteratiu(2)?: ');
+            vect = obj.FExtL - obj.KLR*obj.uR;
+            c = input('Resolució per mètode iteratiu(1) o directe(2)?: ');
 
             switch c
                 case 1
-                    object = DirectSolver;
-                    object.KLL = obj.KLL;
-                    object.vector = vect;
-                    obj.uL = directsolver(object);
+                    s.KLL = obj.KLL;
+                    s.vect = vect;
+                    itSolv = IterativeSolver(s);
+                    itSolv.solveIterative();
+                    obj.uL = itSolv.alphaX;
                 case 2
-                    object = IterativeSolver;
-                    object.KLL = obj.KLL;
-                    object.vector = vect;
-                    obj.uL = directsolver(object);
+                    s.KLL = obj.KLL;
+                    s.vect = vect;
+                    itSolv = DirectSolver(s);
+                    itSolv.solveDirect();
+                    obj.uL = itSolv.alphaX;
             end
         
         end
         
         function finalReactionsDisplacementsAssembler(obj)
-            obj.R_solv = obj.KRR*obj.uR + obj.KRL*obj.uL - obj.F_ext_R;
+            obj.RSolv = obj.KRR*obj.uR + obj.KRL*obj.uL - obj.FExtR;
 
             z = size(obj.vR, 1) + size(obj.vL, 1);
             u_void = zeros(z, 1);
@@ -136,7 +138,7 @@ classdef SystemSolver < handle
             for i = 1:size(obj.vR, 1)
                u_void(obj.vR(i), 1) = obj.uR(i,1);
             end
-            obj.u_solv = u_void;
+            obj.uSolv = u_void;
         end
     
     end
