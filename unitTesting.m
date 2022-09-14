@@ -1,6 +1,5 @@
 classdef unitTesting < handle
-    %UNTITLED2 Summary of this class goes here
-    %   Detailed explanation goes here
+    % Class to test some code's features
     
     properties (Access = public)
         K_G
