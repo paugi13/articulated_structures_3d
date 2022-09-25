@@ -28,10 +28,17 @@ classdef KGassembler < handle
            Ke = zeros(2*obj.n_d, 2*obj.n_d, obj.n_el);
             for i=1:obj.n_el
                 [x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e] = obj.getCoords(i);
-                l_e = KGassembler.calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e);
-                R_e = KGassembler.calculateRotMatrix(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e, l_e);
-                Kel = KeCalc(obj, i, l_e);
-                Ke(:,:,i) = KGassembler.assembleKe(R_e, Kel);
+                s.x1 = x_1_e;
+                s.x2 = x_2_e;
+                s.y1 = y_1_e;
+                s.y2 = y_2_e;
+                s.z1 = z_1_e;
+                s.z2 = z_2_e;
+                bar = BarCalculator(s);
+                bar.calculateParameters();
+                Kel = KeCalc(obj, i, bar);
+                bar.getKe(Kel);
+                Ke(:,:,i) = bar.KeBar;
             end
             
             obj.K_e = Ke; 
@@ -78,30 +85,14 @@ classdef KGassembler < handle
                 z_2_e= obj.x(obj.Tnod(i,2),3);
         end
         
-        function Kel = KeCalc(obj, i, l_e)
+        function Kel = KeCalc(obj, i, bar)
             material = obj.Tmat(i);
             young = obj.mat(material,1);
             area = obj.mat(material,2);
-            Kel= young*area/l_e*[1 -1; -1 1];
+            Kel= young*area/bar.L*[1 -1; -1 1];
         end
         
     end
     
-    methods (Static)
-        function l_e = calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e)
-            l_e= sqrt((x_2_e-x_1_e)^2+(y_2_e-y_1_e)^2+(z_2_e-z_1_e)^2);
-        end
-        
-        function R_e = calculateRotMatrix(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e, l_e)
-            R_e = 1/l_e*[x_2_e-x_1_e y_2_e-y_1_e z_2_e-z_1_e 0 0 0;
-                            0 0 0 x_2_e-x_1_e y_2_e-y_1_e z_2_e-z_1_e
-                    ];
-        end
-        
-        function K_e = assembleKe(R_e, Kel)
-            K_e = R_e.'*Kel*R_e;
-        end
-    
-    end
 end
 
