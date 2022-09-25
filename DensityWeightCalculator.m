@@ -1,7 +1,5 @@
 classdef DensityWeightCalculator < handle
-    %UNTITLED Summary of this class goes here
-    %   Detailed explanation goes here
-    
+
     properties (Access = public)
         Fbar
     end
@@ -17,8 +15,6 @@ classdef DensityWeightCalculator < handle
     
     methods (Access = public)
         function obj = DensityWeightCalculator(cParams)
-            %UNTITLED Construct an instance of this class
-            %   Detailed explanation goes here
             obj.init(cParams);
         end
         
@@ -28,8 +24,15 @@ classdef DensityWeightCalculator < handle
             
             for i=1:obj.n_el
                 [x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e] = obj.getCoords(i);
-                l_e = DensityWeightCalculator.calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e);
-                W_bar = obj.weightCalculator(l_e, i);
+                s.x1 = x_1_e;
+                s.x2 = x_2_e;
+                s.y1 = y_1_e;
+                s.y2 = y_2_e;
+                s.z1 = z_1_e;
+                s.z2 = z_2_e;
+                bar = BarCalculator(s);
+                bar.calculateParameters();
+                W_bar = obj.weightCalculator(bar.L, i);
                 
                 F_bar_data(j,:) = forceDataMatrix(obj, i, 3, W_bar);
                 j = j+1;
@@ -75,10 +78,5 @@ classdef DensityWeightCalculator < handle
     
     end
     
-    methods (Static)
-        function l_e = calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e)
-            l_e= sqrt((x_2_e-x_1_e)^2+(y_2_e-y_1_e)^2+(z_2_e-z_1_e)^2);
-        end
-    end
 end
 
