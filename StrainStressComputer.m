@@ -1,6 +1,4 @@
 classdef StrainStressComputer < handle
-    %UNTITLED2 Summary of this class goes here
-    %   Detailed explanation goes here
     
     properties (Access = public)
         epsComp
@@ -28,12 +26,20 @@ classdef StrainStressComputer < handle
             l_e = zeros(obj.n_el,1);
             E_e = zeros(obj.n_el,1);
             for i=1:obj.n_el
-                [x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e] = getCoords(obj, i);           
-                l_e(i)= StrainStressComputer.calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, ...
-                    z_1_e, z_2_e);
-                R_e_aux = StrainStressComputer.calculateRotMatrix(x_1_e, x_2_e, y_1_e, y_2_e, ...
-                    z_1_e, z_2_e, l_e(i));
-               R_e(:,:,i)= R_e_aux;
+                [x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e] = getCoords(obj, i);
+                s.x1 = x_1_e;
+                s.x2 = x_2_e;
+                s.y1 = y_1_e;
+                s.y2 = y_2_e;
+                s.z1 = z_1_e;
+                s.z2 = z_2_e;
+                bar = BarCalculator(s);
+                bar.calculateParameters();
+%                 l_e(i)= StrainStressComputer.calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, ...
+%                     z_1_e, z_2_e);
+%                 R_e_aux = StrainStressComputer.calculateRotMatrix(x_1_e, x_2_e, y_1_e, y_2_e, ...
+%                     z_1_e, z_2_e, l_e(i));
+               R_e(:,:,i)= bar.rotMat;
                E_e(i) = obj.mat(obj.Tmat(i),1);
             end        
             u_e_global = displacementPerElementGlobal(obj);
@@ -99,17 +105,5 @@ classdef StrainStressComputer < handle
 
     end
     
-    methods (Static)
-        function l_e = calculateBarLength(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e)
-            l_e= sqrt((x_2_e-x_1_e)^2+(y_2_e-y_1_e)^2+(z_2_e-z_1_e)^2);
-        end
-        
-        function R_e = calculateRotMatrix(x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e, l_e)
-            R_e = 1/l_e*[x_2_e-x_1_e y_2_e-y_1_e z_2_e-z_1_e 0 0 0;
-                            0 0 0 x_2_e-x_1_e y_2_e-y_1_e z_2_e-z_1_e
-                    ];
-        end
-    
-    end
 end
 
