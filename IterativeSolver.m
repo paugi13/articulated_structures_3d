@@ -1,11 +1,37 @@
-classdef IterativeSolver < solver
+classdef IterativeSolver < handle
 % uL = KLL\(F_ext_L - KLR*uR);
 
-methods (Access = public)
-    function uL = iterativeSolver(obj)
-        uL = pcg(obj.KLL, obj.vector);
+    properties (Access = public)
+        alphaX
     end
+    
+    
+    properties (Access = private)
+        KLL
+        vector
+    end
+    
+    methods (Access = public)
+        function obj = IterativeSolver(cParams)
+            obj.init(cParams);
+        end
         
-end
+        function solveIterative(obj)
+            obj.alphaX = obj.solve();
+        end
+    end
+    
+    methods (Access = private)
+        function init(obj, cParams)
+            obj.KLL    = cParams.KLL;
+            obj.vector = cParams.vect;
+        end
+        
+        function alpha = solve(obj)
+            alpha = pcg(obj.KLL, obj.vector);
+        end
+    end
+    
+    
     
 end
