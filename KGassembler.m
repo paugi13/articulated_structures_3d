@@ -5,12 +5,12 @@ classdef KGassembler < handle
     end
     
     properties (Access = private)
-        n_el_dof 
-        n_dof 
-        n_el 
+        nElDof 
+        nDof 
+        nEl 
         K_e
         Td
-        n_d
+        nD
         x
         mat
         Tmat
@@ -23,8 +23,8 @@ classdef KGassembler < handle
         end
         
         function assembleMatrix(obj)
-           Ke = zeros(2*obj.n_d, 2*obj.n_d, obj.n_el);
-            for i=1:obj.n_el
+           Ke = zeros(2*obj.nD, 2*obj.nD, obj.nEl);
+            for i=1:obj.nEl
                 [x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e] = obj.getCoords(i);
                 s.x1 = x_1_e;
                 s.x2 = x_2_e;
@@ -42,11 +42,11 @@ classdef KGassembler < handle
             obj.K_e = Ke; 
             
             
-           KG = zeros(obj.n_dof, obj.n_dof);
-            for e = 1:obj.n_el
-                for i = 1:obj.n_el_dof
+           KG = zeros(obj.nDof, obj.nDof);
+            for e = 1:obj.nEl
+                for i = 1:obj.nElDof
                     I = obj.Td(e,i);
-                    for j = 1:obj.n_el_dof
+                    for j = 1:obj.nElDof
                         J = obj.Td(e,j);
                         KG(I,J) = KG(I,J) + obj.K_e(i,j,e); 
                     end
@@ -61,13 +61,13 @@ classdef KGassembler < handle
  
     methods (Access = private)
         function init(obj, cParams)
-            obj.n_el_dof = cParams.n_el_dof;
-            obj.n_dof = cParams.n_dof;
-            obj.n_el = cParams.n_el;
+            obj.nElDof = cParams.nElDof;
+            obj.nDof = cParams.nDof;
+            obj.nEl = cParams.nEl;
             obj.Td = cParams.Td;
             obj.K_e = cParams.K_e;
-            obj.n_d  = cParams.n_d;
-            obj.n_el = cParams.n_el;
+            obj.nD  = cParams.nD;
+            obj.nEl = cParams.nEl;
             obj.x    = cParams.x;
             obj.mat  = cParams.mat;
             obj.Tmat = cParams.Tmat;

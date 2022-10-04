@@ -8,7 +8,7 @@ classdef DensityWeightCalculator < handle
             x    
             mat  
             Tmat
-            n_el 
+            nEl 
             Td 
             Tnod
     end
@@ -20,9 +20,9 @@ classdef DensityWeightCalculator < handle
         
         function calculateWeights(obj)
             j=1;
-            F_bar_data = zeros(2*obj.n_el, 3);
+            F_bar_data = zeros(2*obj.nEl, 3);
             
-            for i=1:obj.n_el
+            for i=1:obj.nEl
                 [x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e] = obj.getCoords(i);
                 s.x1 = x_1_e;
                 s.x2 = x_2_e;
@@ -50,7 +50,7 @@ classdef DensityWeightCalculator < handle
            obj.x = cParams.x;
            obj.mat = cParams.mat;
            obj.Tmat = cParams.Tmat;
-           obj.n_el = cParams.n_el;
+           obj.nEl = cParams.nEl;
            obj.Td = cParams.Td;
            obj.Tnod = cParams.Tnod;
         end

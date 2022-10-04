@@ -5,7 +5,7 @@ classdef AllForceComputing < handle
     end
     
     properties (Access = private)
-       n_dof
+       nDof
        Fdata
        Fbar
     end
@@ -23,13 +23,13 @@ classdef AllForceComputing < handle
     
     methods (Access = private)
         function init(obj, cParams)
-            obj.n_dof = cParams.n_dof;
+            obj.nDof = cParams.nDof;
             obj.Fdata = cParams.Fdata;
             obj.Fbar = cParams.Fbar;
         end
     
         function Fext = addMainForces(obj)
-            Fext = zeros(obj.n_dof,1);
+            Fext = zeros(obj.nDof,1);
 
             for i=1:size(obj.Fdata,1)
             % The value is added again because of the bars' densities calculus, that

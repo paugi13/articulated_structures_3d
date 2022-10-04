@@ -7,9 +7,9 @@ classdef DofsMatrixAssembler < handle
     end
     
     properties (Access = private)
-        n_el
-        n_nod
-        n_i
+        nEl
+        nNod
+        nI
         Tnod
     end
     
@@ -26,16 +26,16 @@ classdef DofsMatrixAssembler < handle
     
     methods (Access = private)
         function init(obj, cParams)
-            obj.n_el = cParams.n_el;
-            obj.n_nod = cParams.n_nod;
-            obj.n_i = cParams.n_i;
+            obj.nEl = cParams.nEl;
+            obj.nNod = cParams.nNod;
+            obj.nI = cParams.nI;
             obj.Tnod = cParams.Tnod;
         end
         
         function TdAssembler(obj)
-            T_d = zeros(obj.n_el, obj.n_i*obj.n_nod);
+            T_d = zeros(obj.nEl, obj.nI*obj.nNod);
 
-            for i=1:obj.n_el
+            for i=1:obj.nEl
                 T_d(i,:) = [obj.Tnod(i,1)*3-2 obj.Tnod(i,1)*3-1 ...
                     obj.Tnod(i,1)*3 obj.Tnod(i,2)*3-2 ...
                     obj.Tnod(i,2)*3-1 obj.Tnod(i,2)*3];

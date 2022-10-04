@@ -2,13 +2,13 @@ classdef BoundaryConditionsSetter < handle
     % Class to apply the boundary conditions knowing the restricted DOFs
     
     properties (Access = public)
-        v_R
-        v_L
-        u_R
+        vR
+        vL
+        uR
     end
     
     properties (Access = private)
-        n_dof
+        nDof
         fixNodes
     end
     
@@ -21,9 +21,9 @@ classdef BoundaryConditionsSetter < handle
          
             fixNod_global = globalDofSetter(obj);
             obj.restrictedDofVectorBuilder(fixNod_global);
-            obj.v_L = zeros(obj.n_dof-size(obj.fixNodes,1), 1);         
+            obj.vL = zeros(obj.nDof-size(obj.fixNodes,1), 1);         
             g = 1;
-            for j = 1:obj.n_dof  
+            for j = 1:obj.nDof  
             g = discriminateVR(obj, j, g);  
             end
 
@@ -36,7 +36,7 @@ classdef BoundaryConditionsSetter < handle
     
     methods (Access = private)
         function init(obj, cParams)
-            obj.n_dof = cParams.n_dof;
+            obj.nDof = cParams.nDof;
             obj.fixNodes = cParams.fixNod;
         end
         
@@ -75,24 +75,24 @@ classdef BoundaryConditionsSetter < handle
             for i = 1:size(fixNod_global,1)
                 vRest(i, 1)=fixNod_global(i,2);
             end
-            obj.v_R = vRest;
+            obj.vR = vRest;
         end
         
         function g = discriminateVR(obj, j, g)
             a = 0;
-            for i=1:size(obj.v_R, 1)
-                if j == obj.v_R(i,1)
+            for i=1:size(obj.vR, 1)
+                if j == obj.vR(i,1)
                 a = 1;
                 end
             end
             if a == 0
-                obj.v_L(g,1) = j;
+                obj.vL(g,1) = j;
                 g=g+1;
             end    
         end
         
         function initializeUR(obj)
-            obj.u_R = zeros(size(obj.fixNodes,1), 1);
+            obj.uR = zeros(size(obj.fixNodes,1), 1);
         end
     end
 end

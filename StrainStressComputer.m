@@ -6,8 +6,8 @@ classdef StrainStressComputer < handle
     end
     
     properties (Access = private)
-        n_d
-        n_el
+        nD
+        nEl
         uMethod
         Td
         x                
@@ -22,10 +22,10 @@ classdef StrainStressComputer < handle
         end
         
         function computeStrainStress(obj)
-            R_e = zeros(2, 2*obj.n_d, obj.n_el);
-            l_e = zeros(obj.n_el,1);
-            E_e = zeros(obj.n_el,1);
-            for i=1:obj.n_el
+            R_e = zeros(2, 2*obj.nD, obj.nEl);
+            l_e = zeros(obj.nEl,1);
+            E_e = zeros(obj.nEl,1);
+            for i=1:obj.nEl
                 [x_1_e, x_2_e, y_1_e, y_2_e, z_1_e, z_2_e] = getCoords(obj, i);
                 s.x1 = x_1_e;
                 s.x2 = x_2_e;
@@ -53,8 +53,8 @@ classdef StrainStressComputer < handle
     
     methods (Access = private)
         function init(obj, cParams)
-            obj.n_d = cParams.n_d;
-            obj.n_el = cParams.n_el;
+            obj.nD = cParams.nD;
+            obj.nEl = cParams.nEl;
             obj.uMethod = cParams.uMethod;
             obj.Td = cParams.Td;
             obj.x = cParams.x;                
@@ -73,9 +73,9 @@ classdef StrainStressComputer < handle
         end
         
         function u_global = displacementPerElementGlobal(obj)
-            u_global = zeros(size(obj.Td,2), 1, obj.n_el);
+            u_global = zeros(size(obj.Td,2), 1, obj.nEl);
 
-            for i = 1:obj.n_el      %Line selector in Td
+            for i = 1:obj.nEl      %Line selector in Td
                 for j = 1:size(obj.Td,2)    %Column selector in Td
                     u_global(j, 1, i) = obj.uMethod(obj.Td(i, j), 1);
                 end
@@ -84,18 +84,18 @@ classdef StrainStressComputer < handle
         
         function u_local = disPerElementLocal(obj, u_global, R_e)
 
-            u_local = zeros(2, 1, obj.n_el);
+            u_local = zeros(2, 1, obj.nEl);
             %size(Td,2)
-            for i = 1:obj.n_el
+            for i = 1:obj.nEl
                 u_local(:, 1, i) = R_e(:,:,i)*u_global(:,1,i);
             end
         end
         
         function epsSigCalculator(obj, E_e, l_e, u_e_local)
-            eps = zeros(obj.n_el, 1);
-            sig = zeros(obj.n_el, 1);
+            eps = zeros(obj.nEl, 1);
+            sig = zeros(obj.nEl, 1);
 
-            for i = 1:obj.n_el
+            for i = 1:obj.nEl
                 eps(i,1) = 1/l_e(i)*[-1 1 ]*u_e_local(:, 1, i);
                 sig(i,1) = E_e(i)*eps(i,1);
             end

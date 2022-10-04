@@ -8,7 +8,7 @@ classdef ForcesEquilibriumCalculator < handle
     end
     
     properties (Access = private)
-        F_bar
+        Fbar
         Wm
         H
         W         
@@ -31,7 +31,7 @@ classdef ForcesEquilibriumCalculator < handle
     
     methods (Access = private)
         function init(obj, cParams)
-            obj.F_bar = cParams.Fbar;
+            obj.Fbar = cParams.Fbar;
             obj.Wm = cParams.Wm;
             obj.H = cParams.H;
             obj.W = cParams.W;
@@ -43,19 +43,19 @@ classdef ForcesEquilibriumCalculator < handle
             W_B = 0;
             W_A = 0;
 
-            for i = 1:size(obj.F_bar,1)
+            for i = 1:size(obj.Fbar,1)
 
-               if obj.F_bar(i,1)==4||obj.F_bar(i,1)==5||obj.F_bar(i,1)==6
-                    W_D = W_D-obj.F_bar(i,3);
+               if obj.Fbar(i,1)==4||obj.Fbar(i,1)==5||obj.Fbar(i,1)==6
+                    W_D = W_D-obj.Fbar(i,3);
                end
-               if obj.F_bar(i,1)==7
-                    W_C = W_C-obj.F_bar(i,3);
+               if obj.Fbar(i,1)==7
+                    W_C = W_C-obj.Fbar(i,3);
                end 
-               if obj.F_bar(i,1)==3
-                    W_B = W_B-obj.F_bar(i,3);
+               if obj.Fbar(i,1)==3
+                    W_B = W_B-obj.Fbar(i,3);
                end
-               if obj.F_bar(i,1)==1||obj.F_bar(i,1)==2
-                    W_A = W_A-obj.F_bar(i,3);
+               if obj.Fbar(i,1)==1||obj.Fbar(i,1)==2
+                    W_A = W_A-obj.Fbar(i,3);
                end
             end
         end

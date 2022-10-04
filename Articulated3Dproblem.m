@@ -68,8 +68,8 @@ classdef Articulated3Dproblem < handle
         end
         
         function computeResults(obj)
-            s.n_d = obj.varStruct.n_d;
-            s.n_el = obj.varStruct.n_el;
+            s.nD = obj.varStruct.nD;
+            s.nEl = obj.varStruct.nEl;
             s.uMethod = obj.uMethod;
             s.Td = obj.Td;
             s.x = obj.varStruct.x;     
@@ -86,9 +86,9 @@ classdef Articulated3Dproblem < handle
         end
         
         function connectDofs(obj)
-            s.n_el = obj.varStruct.n_el;
-            s.n_nod = obj.varStruct.n_nod;
-            s.n_i = obj.varStruct.n_i;
+            s.nEl = obj.varStruct.nEl;
+            s.nNod = obj.varStruct.nNod;
+            s.nI = obj.varStruct.nI;
             s.Tnod = obj.varStruct.Tnod;
             dofConnection = DofsMatrixAssembler(s);
             dofConnection.assembleTd();
@@ -96,17 +96,17 @@ classdef Articulated3Dproblem < handle
         end
         
         function assembleKG(obj)
-            s.n_d = obj.varStruct.n_d;
-            s.n_el = obj.varStruct.n_el;
+            s.nD = obj.varStruct.nD;
+            s.nEl = obj.varStruct.nEl;
             s.x = obj.varStruct.x;
             s.Tnod = obj.varStruct.Tnod;
             s.mat = obj.varStruct.mat;
             s.Tmat = obj.varStruct.Tmat;
             
             % Global stiffness matrix assembly
-            s.n_el_dof = obj.varStruct.n_el_dof;
-            s.n_dof    = obj.varStruct.n_dof;
-            s.n_el     = obj.varStruct.n_el;
+            s.nElDof = obj.varStruct.nElDof;
+            s.nDof    = obj.varStruct.nDof;
+            s.nEl     = obj.varStruct.nEl;
             s.K_e      = obj.K_e;
             s.Td       = obj.Td;
             
@@ -116,28 +116,28 @@ classdef Articulated3Dproblem < handle
         end
         
         function applyConditions(obj)
-            s.n_dof = obj.varStruct.n_dof;
+            s.nDof = obj.varStruct.nDof;
             s.fixNod = obj.varStruct.fixNod;
             
             boundarySetter = BoundaryConditionsSetter(s);
             boundarySetter.applyConditions();
-            obj.vR = boundarySetter.v_R;
-            obj.uR = boundarySetter.u_R;
-            obj.vL = boundarySetter.v_L;
+            obj.vR = boundarySetter.vR;
+            obj.uR = boundarySetter.uR;
+            obj.vL = boundarySetter.vL;
         end
         
         function computeF(obj)
             s.x    = obj.varStruct.x;
             s.mat  = obj.varStruct.mat;
             s.Tmat = obj.varStruct.Tmat;
-            s.n_el = obj.varStruct.n_el;
+            s.nEl = obj.varStruct.nEl;
             s.Td   = obj.Td;
             s.Tnod = obj.varStruct.Tnod;
             s.Wm = obj.varStruct.W_M;
             s.H = obj.varStruct.H;
             s.W = obj.varStruct.W;
-            s.n_i = obj.varStruct.n_i;
-            s.n_dof = obj.varStruct.n_dof;
+            s.nI = obj.varStruct.nI;
+            s.nDof = obj.varStruct.nDof;
             
             weights_calculus = DensityWeightCalculator(s);
             weights_calculus.calculateWeights();
